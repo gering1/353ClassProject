@@ -54,7 +54,6 @@ public class guiClient {
       //open login form
       UsernameAndPass loginForm = new UsernameAndPass();
       loginForm.launch(UsernameAndPass.class, args);
-      System.out.println(loginForm.getUsername() + "," + loginForm.getPassword());
 
       // Start a thread to listen and display data sent by the server
       ClientListener listener = new ClientListener(connectionSock);
