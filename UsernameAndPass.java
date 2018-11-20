@@ -17,10 +17,12 @@ import javafx.geometry.Pos;
 import javafx.scene.text.FontWeight;
 import javafx.scene.paint.Color;
 import javafx.scene.control.ButtonBase;
+import javafx.application.Platform;
 import java.io.*;
 class User{
   public String name;
   public String password;
+  public String message;
   // other stuff like login time, avatar, etc. ??
 }
 
@@ -28,6 +30,7 @@ public class UsernameAndPass extends Application{
   Stage window;
   Scene scene1, scene2;
   User user = new User();
+  guiClient client = new guiClient();
 
   public static void main(String[] args){
     launch(args);
@@ -36,6 +39,7 @@ public class UsernameAndPass extends Application{
   private boolean handleLogin(String name, String password) {
    user.name = name;
    user.password = password;
+   //client.connect();
    // create a user object in Main of type user class and stuff values in there
    // if successful login... otherwise if login not successful, return false
    return true;
@@ -73,6 +77,12 @@ public class UsernameAndPass extends Application{
 
       btn.setOnAction(e -> {
         if (handleLogin(userTextField.getText(), pwBox.getText())){
+				Platform.runLater(new Runnable(){
+						@Override public void run(){
+							client.connect();
+						}
+				});
+		  //client.connect();
           window.setScene(scene2);
           window.setTitle("Main Chat App");
         } else {
@@ -82,13 +92,39 @@ public class UsernameAndPass extends Application{
       return new Scene(grid, 300, 250);
     }
 
-    private Scene createMainScene(Stage win){
-        Button button2 = new Button("Exit");
-        button2.setOnAction(e -> window.close());
-        StackPane layout2 = new StackPane();
-        layout2.getChildren().add(button2);
+	private Scene createMainScene(Stage win){
+        
+		StackPane layout2 = new StackPane();
+	
+		String textMessage = "";
 
-        return new Scene(layout2, 600, 600);
+        Button button2 = new Button("Enter");
+		layout2.setAlignment(button2, Pos.BOTTOM_RIGHT);
+
+        //button2.setOnAction(e -> window.close());
+       // StackPane layout2 = new StackPane();
+        //layout2.getChildren().add(button2);
+
+		TextField userInput = new TextField();
+		userInput.setMaxWidth(200);
+		layout2.setAlignment(userInput, Pos.BOTTOM_CENTER);
+
+     	Label userName = new Label("USERNAME");
+		layout2.setAlignment(userName, Pos.BOTTOM_LEFT);
+
+		button2.setOnAction(e -> {
+				Platform.runLater(new Runnable(){
+						@Override public void run(){
+							sendMessage(userInput.getText());
+						}
+				});
+		});
+
+		layout2.getChildren().add(userInput);
+		layout2.getChildren().add(userName); 
+		layout2.getChildren().add(button2);
+
+		return new Scene(layout2, 400, 400);
       }
 
       @Override
@@ -102,12 +138,36 @@ public class UsernameAndPass extends Application{
     window.show();
 }
 
-    public String getUsername()
+	public String getUsername()
     {
-      return user.name;
+    	return user.name;
     }
     public String getPassword()
     {
-      return user.password;
+     	return user.password;
     }
+
+    public void setMessage(String newMessage)
+    {
+	    user.message = newMessage;
+    }
+
+    public String getMessage()
+    {
+		return user.message;
+    }
+
+    public void sendMessage(String newMessage)
+    {
+		try{
+			Platform.runLater(new Runnable(){
+				@Override public void run(){
+					client.messageOut(newMessage);
+				}
+			});
+		} catch(NullPointerException e){
+				throw new IllegalStateException("Somethin is null");
+		}
+    }
+
 }
