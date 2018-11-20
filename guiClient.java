@@ -37,6 +37,9 @@ public class guiClient {
    * main method.
    * @params not used.
    */
+
+	static DataOutputStream serverOutput;
+
   public static void main(String[] args) {
     try {
 
@@ -46,14 +49,9 @@ public class guiClient {
       System.out.println("Connecting to server on port " + port);
       Socket connectionSock = new Socket(hostname, port);
 
-      DataOutputStream serverOutput = new DataOutputStream(connectionSock.getOutputStream());
+      serverOutput = new DataOutputStream(connectionSock.getOutputStream());
 
       System.out.println("Connection made.");
-
-
-      //open login form
-      UsernameAndPass loginForm = new UsernameAndPass();
-      loginForm.launch(UsernameAndPass.class, args);
 
       // Start a thread to listen and display data sent by the server
       ClientListener listener = new ClientListener(connectionSock);
@@ -72,4 +70,49 @@ public class guiClient {
       System.out.println(e.getMessage());
     }
   }
+
+  public guiClient()
+  {
+
+  }
+
+	public void connect()
+	{
+			System.out.println("WORKING1");
+    	try {
+
+      		String hostname = "localhost";
+      		int port = 7654;
+
+      		System.out.println("Connecting to server on port " + port);
+      		Socket connectionSock = new Socket(hostname, port);
+
+      		serverOutput = new DataOutputStream(connectionSock.getOutputStream());
+
+      		System.out.println("Connection made.");
+
+      		ClientListener listener = new ClientListener(connectionSock);
+      		Thread theThread = new Thread(listener);
+      		theThread.start();
+
+    	} catch (IOException e) {
+      		System.out.println(e.getMessage());
+    	}
+	}
+
+	public void messageOut(String message)
+	{
+
+			System.out.println("WORKING1");
+		try {
+			String data = message;
+			System.out.println(data);
+			serverOutput.writeBytes(data+ "\n");
+		} catch(NullPointerException e) {
+			System.out.println(e.getMessage());
+		} catch(IOException e){
+			System.out.println(e.getMessage());
+		}
+	}
+
 } // MtClient
