@@ -29,20 +29,28 @@ class User{
 public class UsernameAndPass extends Application{
   Stage window;
   Scene scene1, scene2;
-  User user = new User();
+  //User user = new User();
+  UserAccount user = new UserAccount();
   guiClient client = new guiClient();
-
+	static UserAccountList userList = new UserAccountList();
+    
   public static void main(String[] args){
+	//UserAccountList userList = new UserAccountList();
+	userList.inputObject();
+
     launch(args);
+
+	userList.outputStream(userList);
   }
 
   private boolean handleLogin(String name, String password) {
-   user.name = name;
-   user.password = password;
+
+   if(userList.login(name, password))
+		   return true;
    //client.connect();
    // create a user object in Main of type user class and stuff values in there
    // if successful login... otherwise if login not successful, return false
-   return true;
+   return false;
  }
 
   public Scene createLoginScene(Stage win) {
@@ -54,6 +62,7 @@ public class UsernameAndPass extends Application{
       grid.setVgap(10);
       grid.setPadding(new Insets(25, 25, 25, 25));
       Button btn = new Button("Sign in");
+      Button addBtn = new Button("Create user");
 
       Text scenetitle = new Text("Chat Login");
       scenetitle.setFont(Font.font("Allan", FontWeight.NORMAL, 32));
@@ -75,6 +84,11 @@ public class UsernameAndPass extends Application{
       hbBtn.getChildren().add(btn);
       grid.add(hbBtn, 1, 4);
 
+      HBox newBtn = new HBox(10);
+      newBtn.setAlignment(Pos.BOTTOM_LEFT);
+      newBtn.getChildren().add(addBtn);
+      grid.add(newBtn, 1, 5);
+
       btn.setOnAction(e -> {
         if (handleLogin(userTextField.getText(), pwBox.getText())){
 				Platform.runLater(new Runnable(){
@@ -89,6 +103,11 @@ public class UsernameAndPass extends Application{
           System.out.println("Login failed");
         }
       });
+
+	  addBtn.setOnAction(e -> {
+		addNewUser(userTextField.getText(), pwBox.getText());
+	  });
+
       return new Scene(grid, 300, 250);
     }
 
@@ -137,7 +156,7 @@ public class UsernameAndPass extends Application{
     window.setTitle("Login Window");
     window.show();
 }
-
+/*
 	public String getUsername()
     {
     	return user.name;
@@ -156,7 +175,7 @@ public class UsernameAndPass extends Application{
     {
 		return user.message;
     }
-
+*/
     public void sendMessage(String newMessage)
     {
 		try{
@@ -169,5 +188,11 @@ public class UsernameAndPass extends Application{
 				throw new IllegalStateException("Somethin is null");
 		}
     }
+
+	public void addNewUser(String username, String password)
+	{	
+		UserAccount newUser = new UserAccount(username, password, "Hey");
+		userList.addUser(newUser);
+	}
 
 }
