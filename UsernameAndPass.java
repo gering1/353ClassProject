@@ -4,13 +4,20 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.layout.GridPane;
 import javafx.geometry.Insets;
 import javafx.scene.text.Text;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.PasswordField;
 import javafx.scene.text.Font;
 import javafx.geometry.Pos;
@@ -19,21 +26,22 @@ import javafx.scene.paint.Color;
 import javafx.scene.control.ButtonBase;
 import javafx.application.Platform;
 import java.io.*;
+
 class User{
   public String name;
   public String password;
-  public String message;
   // other stuff like login time, avatar, etc. ??
 }
 
 public class UsernameAndPass extends Application{
   Stage window;
   Scene scene1, scene2;
+  TextArea ta;
   //User user = new User();
   UserAccount user = new UserAccount();
-  guiClient client = new guiClient();
+  guiClient client = new guiClient(this);
 	static UserAccountList userList = new UserAccountList();
-    
+
   public static void main(String[] args){
 	//UserAccountList userList = new UserAccountList();
 	userList.inputObject();
@@ -99,6 +107,8 @@ public class UsernameAndPass extends Application{
 		  //client.connect();
           window.setScene(scene2);
           window.setTitle("Main Chat App");
+
+
         } else {
           System.out.println("Login failed");
         }
@@ -112,9 +122,9 @@ public class UsernameAndPass extends Application{
     }
 
 	private Scene createMainScene(Stage win){
-        
+
 		StackPane layout2 = new StackPane();
-	
+
 		String textMessage = "";
 
         Button button2 = new Button("Enter");
@@ -139,8 +149,18 @@ public class UsernameAndPass extends Application{
 				});
 		});
 
+
+    // chat message display area
+    ta = new TextArea();
+    ta.setPrefHeight(250);
+    ta.setPrefWidth(400);
+    ta.setEditable(false);
+    //VBox vbox = new VBox(ta);
+    //vbox.setPrefSize(400,300);
+
+    layout2.getChildren().add(ta);
 		layout2.getChildren().add(userInput);
-		layout2.getChildren().add(userName); 
+		layout2.getChildren().add(userName);
 		layout2.getChildren().add(button2);
 
 		return new Scene(layout2, 400, 400);
@@ -156,6 +176,8 @@ public class UsernameAndPass extends Application{
     window.setTitle("Login Window");
     window.show();
 }
+
+
 /*
 	public String getUsername()
     {
@@ -182,6 +204,8 @@ public class UsernameAndPass extends Application{
 			Platform.runLater(new Runnable(){
 				@Override public void run(){
 					client.messageOut(newMessage);
+          //update chat window
+          ta.appendText("username: " + newMessage + "\n\n");
 				}
 			});
 		} catch(NullPointerException e){
@@ -190,7 +214,7 @@ public class UsernameAndPass extends Application{
     }
 
 	public void addNewUser(String username, String password)
-	{	
+	{
 		UserAccount newUser = new UserAccount(username, password, "Hey");
 		userList.addUser(newUser);
 	}

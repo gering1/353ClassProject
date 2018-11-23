@@ -6,6 +6,8 @@
  *
  */
 
+import javafx.application.Platform;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -19,9 +21,13 @@ import java.util.Scanner;
 
 public class ClientListener implements Runnable {
   private Socket connectionSock = null;
+  private String msg;
+  UsernameAndPass up;
 
-  ClientListener(Socket sock) {
+  ClientListener(Socket sock, UsernameAndPass up) {
     this.connectionSock = sock;
+    this.up = up;
+
   }
 
   /**
@@ -35,7 +41,10 @@ public class ClientListener implements Runnable {
         // Get data sent from the server
         String serverText = serverInput.readLine();
         if (serverInput != null) {
-          System.out.println(serverText);
+          // need to get the remote user object somehow!!
+          //
+          Platform.runLater(()-> up.ta.appendText(serverText + "\n\n"));
+          msg = serverText;
         } else {
           // Connection was lost
           System.out.println("Closing connection for socket " + connectionSock);
