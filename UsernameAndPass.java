@@ -1,13 +1,16 @@
 import javafx.application.Application;
+import java.util.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
@@ -39,6 +42,7 @@ public class UsernameAndPass extends Application{
   Stage window;
   Scene scene1, scene2;
   TextArea ta;
+  ListView<String> usersList = new ListView<String>();
   //User user = new User();
   UserAccount user = new UserAccount();
   guiClient client = new guiClient(this);
@@ -127,23 +131,36 @@ public class UsernameAndPass extends Application{
 
 	private Scene createMainScene(Stage win){
 
-		StackPane layout2 = new StackPane();
+    //populate listview with users
+    Iterator<UserAccount> it = userList.users.iterator();
 
+    userList.printList();
+		while(it.hasNext())
+		{
+        System.out.println("Test");
+				usersList.getItems().add(it.next().getUserName());
+		}
+
+		BorderPane layout2 = new BorderPane();
+    HBox usersBox = new HBox();
+    HBox taBox = new HBox();
+    HBox inputBox = new HBox();
 		String textMessage = "";
 
+    inputBox.setSpacing(20);
     Button enterButton = new Button("Enter");
 		layout2.setAlignment(enterButton, Pos.BOTTOM_RIGHT);
 
-        //button2.setOnAction(e -> window.close());
-       // StackPane layout2 = new StackPane();
-        //layout2.getChildren().add(button2);
+    usersList.setPrefWidth(200);
+    usersList.setPrefHeight(50);
+
+    usersList.getItems().add("hi");
 
 		TextField userInput = new TextField();
+    userInput.setPrefWidth(200);
 		userInput.setMaxWidth(200);
-		layout2.setAlignment(userInput, Pos.BOTTOM_CENTER);
 
     Label userName = new Label(user.getUserName());
-		layout2.setAlignment(userName, Pos.BOTTOM_LEFT);
 
 		enterButton.setOnAction(e -> {
 				Platform.runLater(new Runnable(){
@@ -170,16 +187,19 @@ public class UsernameAndPass extends Application{
     // chat message display area
     ta = new TextArea();
     ta.setPrefHeight(250);
-    ta.setPrefWidth(400);
+    ta.setPrefWidth(200);
     ta.setEditable(false);
     //VBox vbox = new VBox(ta);
     //vbox.setPrefSize(400,300);
 
-    layout2.getChildren().add(ta);
-		layout2.getChildren().add(userInput);
-		layout2.getChildren().add(userName);
-		layout2.getChildren().add(enterButton);
+    taBox.getChildren().add(ta);
+		inputBox.getChildren().add(userInput);
+    inputBox.getChildren().add(enterButton);
+    usersBox.getChildren().add(usersList);
 
+    layout2.setLeft(taBox);
+    layout2.setBottom(inputBox);
+    layout2.setRight(usersBox);
 		return new Scene(layout2, 400, 400);
       }
 

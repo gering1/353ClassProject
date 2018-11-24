@@ -1,10 +1,16 @@
-import java.util.*;
 import java.io.ObjectOutputStream;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.FileNotFoundException;
-import java.io.FileInputStream;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.*;
+import java.util.ArrayList;
+import java.io.IOException;
+import java.io.FileInputStream;
 import java.io.Serializable;
 
 
@@ -13,6 +19,15 @@ public class UserAccountList implements Serializable
 
 	ArrayList<UserAccount> users = new ArrayList<UserAccount>();
 
+	public void printList()
+	{
+		Iterator<UserAccount> it = users.iterator();
+		UserAccount ua;
+		while(it.hasNext())
+		{
+			System.out.println(it.next().toString());
+		}
+	}
 
 	public void addUser(UserAccount newUser)
 	{
@@ -65,7 +80,7 @@ public class UserAccountList implements Serializable
 			ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("Users"));
 
 			System.out.println("Working");
-			//outputStream.writeObject(user);
+			outputStream.writeObject(users);
 			System.out.println("Working");
 			//System.out.println(this.accountAmount);
 
@@ -86,9 +101,7 @@ public class UserAccountList implements Serializable
 		{
 			ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("Users"));
 
-			UserAccountList in1 = (UserAccountList)inputStream.readObject();
-
-			users = in1.users;
+			users = (ArrayList<UserAccount>)inputStream.readObject();
 
 			inputStream.close();
 		}
