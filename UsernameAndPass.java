@@ -25,6 +25,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.paint.Color;
 import javafx.scene.control.ButtonBase;
 import javafx.application.Platform;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.KeyCode;
 import java.io.*;
 
 class User{
@@ -48,7 +50,7 @@ public class UsernameAndPass extends Application{
 
     launch(args);
 
-	userList.outputStream(userList);
+	//userList.outputStream(userList);
   }
 
   private boolean handleLogin(String name, String password) {
@@ -101,6 +103,7 @@ public class UsernameAndPass extends Application{
         if (handleLogin(userTextField.getText(), pwBox.getText())){
 				Platform.runLater(new Runnable(){
 						@Override public void run(){
+              user.setUserName(userTextField.getText());
 							client.connect();
 						}
 				});
@@ -117,7 +120,8 @@ public class UsernameAndPass extends Application{
 	  addBtn.setOnAction(e -> {
 		addNewUser(userTextField.getText(), pwBox.getText());
 	  });
-
+      userTextField.clear();
+      pwBox.clear();
       return new Scene(grid, 300, 250);
     }
 
@@ -127,8 +131,8 @@ public class UsernameAndPass extends Application{
 
 		String textMessage = "";
 
-        Button button2 = new Button("Enter");
-		layout2.setAlignment(button2, Pos.BOTTOM_RIGHT);
+    Button enterButton = new Button("Enter");
+		layout2.setAlignment(enterButton, Pos.BOTTOM_RIGHT);
 
         //button2.setOnAction(e -> window.close());
        // StackPane layout2 = new StackPane();
@@ -138,16 +142,29 @@ public class UsernameAndPass extends Application{
 		userInput.setMaxWidth(200);
 		layout2.setAlignment(userInput, Pos.BOTTOM_CENTER);
 
-     	Label userName = new Label("USERNAME");
+    Label userName = new Label(user.getUserName());
 		layout2.setAlignment(userName, Pos.BOTTOM_LEFT);
 
-		button2.setOnAction(e -> {
+		enterButton.setOnAction(e -> {
 				Platform.runLater(new Runnable(){
 						@Override public void run(){
 							sendMessage(userInput.getText());
 						}
 				});
 		});
+
+    userInput.setOnKeyPressed(new EventHandler<KeyEvent>() {
+      @Override
+      public void handle(KeyEvent ke) {
+        if (ke.getCode().equals(KeyCode.ENTER)){
+            Platform.runLater(new Runnable(){
+            @Override public void run(){
+              sendMessage(userInput.getText());
+            }
+        });
+        }
+      }
+    });
 
 
     // chat message display area
@@ -161,7 +178,7 @@ public class UsernameAndPass extends Application{
     layout2.getChildren().add(ta);
 		layout2.getChildren().add(userInput);
 		layout2.getChildren().add(userName);
-		layout2.getChildren().add(button2);
+		layout2.getChildren().add(enterButton);
 
 		return new Scene(layout2, 400, 400);
       }
@@ -171,7 +188,6 @@ public class UsernameAndPass extends Application{
     window = primaryStage;
     scene1 = createLoginScene(window);
     scene2 = createMainScene(window);
-
     window.setScene(scene1);
     window.setTitle("Login Window");
     window.show();
@@ -203,9 +219,9 @@ public class UsernameAndPass extends Application{
 		try{
 			Platform.runLater(new Runnable(){
 				@Override public void run(){
-					client.messageOut(newMessage);
+					client.messageOut(user.getUserName() + ": " + newMessage);
           //update chat window
-          ta.appendText("username: " + newMessage + "\n\n");
+          ta.appendText(user.getUserName() + ": " + newMessage + "\n\n");
 				}
 			});
 		} catch(NullPointerException e){
@@ -217,6 +233,7 @@ public class UsernameAndPass extends Application{
 	{
 		UserAccount newUser = new UserAccount(username, password, "Hey");
 		userList.addUser(newUser);
+
 	}
 
 }

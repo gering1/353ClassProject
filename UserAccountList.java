@@ -10,7 +10,9 @@ import java.io.Serializable;
 
 public class UserAccountList implements Serializable
 {
+
 	ArrayList<UserAccount> users = new ArrayList<UserAccount>();
+
 
 	public void addUser(UserAccount newUser)
 	{
@@ -19,8 +21,9 @@ public class UserAccountList implements Serializable
 			System.out.println("Object is empty");
 			System.exit(0);
 		}
-		
+
 		users.add(newUser);
+		outputStream();
 	}
 
 	public void removeUser(String userName)
@@ -34,17 +37,19 @@ public class UserAccountList implements Serializable
 						it.remove();
 				}
 		}
+		outputStream();
 	}
 
 	public boolean login(String userName, String passWord)
 	{
 			Iterator<UserAccount> it = users.iterator();
-
+			UserAccount ua;
 			while(it.hasNext())
 			{
-					if(it.next().getUserName().equals(userName))
+				  ua = it.next();
+					if(ua.getUserName().equals(userName))
 					{
-							if(it.next().getPassword().equals(passWord))
+							if(ua.getPassword().equals(passWord))
 							{
 									return true;
 							}
@@ -53,14 +58,14 @@ public class UserAccountList implements Serializable
 			return false;
 	}
 
-	public void outputStream(UserAccountList user)
+	public void outputStream()
 	{
 		try
 		{
 			ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("Users"));
-		
-			System.out.println("Working");	
-			outputStream.writeObject(user);
+
+			System.out.println("Working");
+			//outputStream.writeObject(user);
 			System.out.println("Working");
 			//System.out.println(this.accountAmount);
 
@@ -74,10 +79,10 @@ public class UserAccountList implements Serializable
 
 	}
 
-	//input object from the file	
+	//input object from the file
 	public void inputObject()
 	{
-		try 
+		try
 		{
 			ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("Users"));
 
