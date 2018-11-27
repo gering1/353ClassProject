@@ -4,6 +4,7 @@ public class UserAccount implements Serializable
 {
 	private String username;
 	private String password;
+	private Integer age;
 	private String authenticationCode;
 
 
@@ -18,7 +19,7 @@ public class UserAccount implements Serializable
 			System.out.println("Object is null");
 			System.exit(0);
 		}
-
+		this.age = user.age;
 		this.username = user.username;
 		this.password = user.password;
 		this.authenticationCode = user.authenticationCode;
@@ -38,10 +39,12 @@ public class UserAccount implements Serializable
 
 	public String toString()
 	{
-		return("\nUsername : " + username + "\n Password : " +
+		return("\nUsername : " + username + "\n Password : " + password +
 			       	"\n authentication code : " + authenticationCode);
 
 	}
+
+
 
 	public String getUserName()
 	{

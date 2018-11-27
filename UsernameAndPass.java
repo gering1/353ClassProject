@@ -22,6 +22,8 @@ import javafx.geometry.Insets;
 import javafx.scene.text.Text;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.PasswordField;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.text.Font;
 import javafx.geometry.Pos;
 import javafx.scene.text.FontWeight;
@@ -65,6 +67,55 @@ public class UsernameAndPass extends Application{
    // create a user object in Main of type user class and stuff values in there
    // if successful login... otherwise if login not successful, return false
    return false;
+ }
+
+ public void editProfile(UserAccount user)
+ {
+   //allows user to change profile settings and save
+   GridPane secondaryLayout = new GridPane();
+
+   Scene secondScene = new Scene(secondaryLayout, 500, 500);
+   Label userName = new Label("User Name:");
+   secondaryLayout.add(userName, 0, 1);
+   TextField userTextField = new TextField(user.getUserName());
+   secondaryLayout.add(userTextField, 1, 1);
+   // New window (Stage)
+   Stage newWindow = new Stage();
+   newWindow.setTitle("Second Stage");
+   newWindow.setScene(secondScene);
+   Button saveProfButton = new Button("Save Changes");
+   secondaryLayout.add(saveProfButton,5,3);
+   saveProfButton.setOnAction(new EventHandler<ActionEvent>() {
+       @Override public void handle(ActionEvent e) {
+         user.setUserName(userTextField.getText());
+       }
+   });
+   // Set position of second window, related to primary window.
+   newWindow.setX(scene1.getX() + 200);
+   newWindow.setY(scene1.getY() + 100);
+
+   newWindow.show();
+ }
+
+ public void displayProfile(UserAccount user)
+ {
+   GridPane secondaryLayout = new GridPane();
+   Scene secondScene = new Scene(secondaryLayout, 500, 500);
+   Label userName = new Label("User Name:");
+   secondaryLayout.add(userName, 0, 1);
+   TextField userTextField = new TextField(user.getUserName());
+   userTextField.setDisable(true);
+   secondaryLayout.add(userTextField, 1, 1);
+   // New window (Stage)
+   Stage newWindow = new Stage();
+   newWindow.setTitle("Second Stage");
+   newWindow.setScene(secondScene);
+
+   // Set position of second window, related to primary window.
+   newWindow.setX(scene1.getX() + 200);
+   newWindow.setY(scene1.getY() + 100);
+
+   newWindow.show();
  }
 
   public Scene createLoginScene(Stage win) {
@@ -151,6 +202,7 @@ public class UsernameAndPass extends Application{
     Button enterButton = new Button("Enter");
 		layout2.setAlignment(enterButton, Pos.BOTTOM_RIGHT);
 
+    Button editProfButton = new Button("Edit Profile");
     usersList.setPrefWidth(200);
     usersList.setPrefHeight(50);
 
@@ -170,6 +222,13 @@ public class UsernameAndPass extends Application{
 				});
 		});
 
+    editProfButton.setOnAction(new EventHandler<ActionEvent>() {
+        @Override public void handle(ActionEvent e) {
+          //open window to edit profile
+          editProfile(user);
+
+        }
+    });
     userInput.setOnKeyPressed(new EventHandler<KeyEvent>() {
       @Override
       public void handle(KeyEvent ke) {
@@ -183,6 +242,17 @@ public class UsernameAndPass extends Application{
       }
     });
 
+    usersList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+    @Override
+    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+        //System.out.println(newValue);
+        UserAccount clickedUser = userList.findUser(newValue);
+        displayProfile(clickedUser);
+
+
+    }
+});
+
 
     // chat message display area
     ta = new TextArea();
@@ -195,6 +265,7 @@ public class UsernameAndPass extends Application{
     taBox.getChildren().add(ta);
 		inputBox.getChildren().add(userInput);
     inputBox.getChildren().add(enterButton);
+    inputBox.getChildren().add(editProfButton);
     usersBox.getChildren().add(usersList);
 
     layout2.setLeft(taBox);
@@ -211,6 +282,7 @@ public class UsernameAndPass extends Application{
     window.setScene(scene1);
     window.setTitle("Login Window");
     window.show();
+
 }
 
 

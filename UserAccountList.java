@@ -41,6 +41,21 @@ public class UserAccountList implements Serializable
 		outputStream();
 	}
 
+	public UserAccount findUser(String uName)
+	{
+		Iterator<UserAccount> it = users.iterator();
+		UserAccount ua;
+		while(it.hasNext())
+		{
+			ua = it.next();
+			if(ua.getUserName().equals(uName))
+			{
+				return ua;
+			}
+		}
+		return new UserAccount();
+	}
+
 	public void removeUser(String userName)
 	{
 		Iterator<UserAccount> it = users.iterator();
