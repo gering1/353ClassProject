@@ -27,6 +27,9 @@ import java.util.ArrayList;
 public class MtServer {
   // Maintain list of all client sockets for broadcast
   private ArrayList<Socket> socketList;
+  UserAccount user = new UserAccount();
+  static UserAccountList userList = new UserAccountList();
+
 
   public MtServer() {
     socketList = new ArrayList<Socket>();
@@ -44,7 +47,7 @@ public class MtServer {
         // Add this socket to the list
         socketList.add(connectionSock);
         // Send to ClientHandler the socket and arraylist of all sockets
-        ClientHandler handler = new ClientHandler(connectionSock, this.socketList);
+        ClientHandler handler = new ClientHandler(connectionSock, this.socketList, userList);
         Thread theThread = new Thread(handler);
         theThread.start();
       }
@@ -55,9 +58,25 @@ public class MtServer {
       System.out.println(e.getMessage());
     }
   }
+/*
+  public void addUser(UserAccount user)
+  {
+		  userList.addUser(user);
+  }
+
+  public boolean login(String name, String password)
+  {
+		if(userList.login(name, password))
+				return true;
+		return false;
+  }
+  */
+
 
   public static void main(String[] args) {
+	userList.inputObject();
     MtServer server = new MtServer();
     server.getConnection();
+	userList.outputStream(userList);
   }
 } // MtServer

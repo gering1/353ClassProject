@@ -38,7 +38,7 @@ public class UserAccountList implements Serializable
 		}
 
 		users.add(newUser);
-		outputStream();
+		//outputStream();
 	}
 
 	public UserAccount findUser(String uName)
@@ -67,7 +67,7 @@ public class UserAccountList implements Serializable
 						it.remove();
 				}
 		}
-		outputStream();
+		//outputStream();
 	}
 
 	public boolean login(String userName, String passWord)
@@ -88,14 +88,14 @@ public class UserAccountList implements Serializable
 			return false;
 	}
 
-	public void outputStream()
+	public void outputStream(UserAccountList user)
 	{
 		try
 		{
 			ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("Users"));
 
 			System.out.println("Working");
-			outputStream.writeObject(users);
+			outputStream.writeObject(user);
 			System.out.println("Working");
 			//System.out.println(this.accountAmount);
 
@@ -115,9 +115,9 @@ public class UserAccountList implements Serializable
 		try
 		{
 			ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("Users"));
-
-			users = (ArrayList<UserAccount>)inputStream.readObject();
-
+			UserAccountList in1 = (UserAccountList)inputStream.readObject();
+			//users = (ArrayList<UserAccount>)inputStream.readObject();
+			users = in1.users;
 			inputStream.close();
 		}
 		catch(FileNotFoundException e)

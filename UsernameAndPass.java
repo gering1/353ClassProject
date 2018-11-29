@@ -48,25 +48,27 @@ public class UsernameAndPass extends Application{
   //User user = new User();
   UserAccount user = new UserAccount();
   guiClient client = new guiClient(this);
-	static UserAccountList userList = new UserAccountList();
+	//static UserAccountList userList = new UserAccountList();
+	//MtServer server = new MtServer();
+	boolean loginV;
 
   public static void main(String[] args){
 	//UserAccountList userList = new UserAccountList();
-	userList.inputObject();
+	//userList.inputObject();
 
     launch(args);
 
 	//userList.outputStream(userList);
   }
 
-  private boolean handleLogin(String name, String password) {
-
-   if(userList.login(name, password))
-		   return true;
+  private void handleLogin(String name, String password) {
+	String number = "1";
+	client.login(name, password, number);
+   //return server.login(name, password);
    //client.connect();
    // create a user object in Main of type user class and stuff values in there
    // if successful login... otherwise if login not successful, return false
-   return false;
+   //return true;
  }
 
  public void editProfile(UserAccount user)
@@ -120,6 +122,7 @@ public class UsernameAndPass extends Application{
 
   public Scene createLoginScene(Stage win) {
 
+	client.connect();
       //final Text actiontarget = new Text();
       GridPane grid = new GridPane();
       grid.setAlignment(Pos.CENTER);
@@ -155,21 +158,24 @@ public class UsernameAndPass extends Application{
       grid.add(newBtn, 1, 5);
 
       btn.setOnAction(e -> {
-        if (handleLogin(userTextField.getText(), pwBox.getText())){
-				Platform.runLater(new Runnable(){
-						@Override public void run(){
-              user.setUserName(userTextField.getText());
-							client.connect();
-						}
-				});
-		  //client.connect();
-          window.setScene(scene2);
-          window.setTitle("Main Chat App");
-
-
-        } else {
-          System.out.println("Login failed");
-        }
+		//client.connect();
+        handleLogin(userTextField.getText(), pwBox.getText());
+		//if(this.loginV == true){
+			Platform.runLater(new Runnable(){
+				@Override public void run(){
+					if(getLogin()){
+            			user.setUserName(userTextField.getText());
+					}
+					else{
+          				System.out.println("Login failed");
+					}
+				}
+			});
+          	window.setScene(scene2);
+          	window.setTitle("Main Chat App");
+        //} //else {
+          //System.out.println("Login failed");
+        //}
       });
 
 	  addBtn.setOnAction(e -> {
@@ -183,15 +189,15 @@ public class UsernameAndPass extends Application{
 	private Scene createMainScene(Stage win){
 
     //populate listview with users
-    Iterator<UserAccount> it = userList.users.iterator();
-
+    //Iterator<UserAccount> it = userList.users.iterator();
+/*
     userList.printList();
 		while(it.hasNext())
 		{
         System.out.println("Test");
 				usersList.getItems().add(it.next().getUserName());
 		}
-
+*/
 		BorderPane layout2 = new BorderPane();
     HBox usersBox = new HBox();
     HBox taBox = new HBox();
@@ -246,8 +252,8 @@ public class UsernameAndPass extends Application{
     @Override
     public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         //System.out.println(newValue);
-        UserAccount clickedUser = userList.findUser(newValue);
-        displayProfile(clickedUser);
+        //UserAccount clickedUser = userList.findUser(newValue);
+        //displayProfile(clickedUser);
 
 
     }
@@ -323,9 +329,26 @@ public class UsernameAndPass extends Application{
 
 	public void addNewUser(String username, String password)
 	{
-		UserAccount newUser = new UserAccount(username, password, "Hey");
-		userList.addUser(newUser);
+
+		//UserAccount newUser = new UserAccount(username, password, "Hey");
+		client.addUser(username, password, "2");
+		//server.addUser(newUser);
 
 	}
 
+	public void setLogin(String login)
+	{
+			System.out.println("Login is: " + login);
+		if(login.equals("true"))
+		{
+				this.loginV = true;
+		}
+		else
+				this.loginV =false;
+	}
+
+	public boolean getLogin()
+	{
+		return this.loginV;
+	}
 }

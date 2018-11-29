@@ -72,6 +72,21 @@ public class guiClient {
     	}
 	}
 
+	public void login(String username, String password, String number)
+	{
+		//System.out.println("WORKING7");
+
+		try{
+			String data = username + " " + password + " " + number;
+			serverOutput.writeBytes(data+ "\n");
+		} catch(NullPointerException e) {
+			System.out.println(e.getMessage());
+		} catch(IOException e){
+			System.out.println(e.getMessage());
+		}
+		//return true;
+	}
+
 	public void messageOut(String message)
 	{
 
@@ -87,4 +102,17 @@ public class guiClient {
 		}
 	}
 
+	public void addUser(String username, String password, String number)
+	{
+		System.out.println("WORKING9");
+
+		try{
+			String data = username + " " + password + " " + number;
+			serverOutput.writeBytes(data+ "\n");
+		} catch(NullPointerException e) {
+			System.out.println(e.getMessage());
+		} catch(IOException e){
+			System.out.println(e.getMessage());
+		}
+	}
 } // MtClient

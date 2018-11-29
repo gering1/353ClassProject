@@ -40,11 +40,30 @@ public class ClientListener implements Runnable {
       while (true) {
         // Get data sent from the server
         String serverText = serverInput.readLine();
+		System.out.println("THIS IS THE SERVER TEXT: " + serverText);
         if (serverInput != null) {
           // need to get the remote user object somehow!!
           //
+			//System.out.println("WORKING5"); 
+			//System.out.println(serverText);
+
+			System.out.println("THIS IS THE SERVER TEXT: " + serverText);
+			if(serverText.equals("SUCCESS"))
+			{
+					System.out.println("Added user to list");
+			}
+			else if(serverText.equals("true 1 1 1")){
+				up.setLogin("true");
+			}	
+			else if(serverText.equals("false 1 1 1")){
+				Platform.runLater(() -> up.setLogin("false"));
+			}
+			else
+					System.out.println("YouLL never get this");
+			/*else{
           Platform.runLater(()-> up.ta.appendText(serverText + "\n\n"));
           msg = serverText;
+			}*/
         } else {
           // Connection was lost
           System.out.println("Closing connection for socket " + connectionSock);
@@ -52,6 +71,7 @@ public class ClientListener implements Runnable {
           break;
         }
       }
+	  System.out.println("WE NEVRE GER HERE");
     } catch (Exception e) {
       System.out.println("Error: " + e.toString());
     }

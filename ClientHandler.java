@@ -21,10 +21,12 @@ import java.util.Scanner;
 public class ClientHandler implements Runnable {
   private Socket connectionSock = null;
   private ArrayList<Socket> socketList;
+	UserAccountList userList;
 
-  ClientHandler(Socket sock, ArrayList<Socket> socketList) {
+  ClientHandler(Socket sock, ArrayList<Socket> socketList, UserAccountList userList) {
     this.connectionSock = sock;
     this.socketList = socketList;  // Keep reference to master list
+	this.userList = userList;
   }
 
   /**
@@ -39,17 +41,83 @@ public class ClientHandler implements Runnable {
       while (true) {
         // Get data sent from a client
         String clientText = clientInput.readLine();
+		String[] splitText = clientText.split(" ");
+		String username = splitText[0];
+		String password = splitText[1];
+		String number = splitText[2];
+		boolean again = true;
+
+				  		System.out.println("WORKING11");
         if (clientText != null) {
           System.out.println("Received: " + clientText);
+	  while(again)
+	  {
+		  switch(number)
+		  {
+			  //login case
+			  case "1":
+
+				  		System.out.println("WORKING4");
+				  if(userList.login(username, password))
+				  {
+				  		System.out.println("WORKING4");
+						DataOutputStream clientOutput = new DataOutputStream(connectionSock.getOutputStream());
+              			clientOutput.writeBytes("true 1 1 1" + "\n");
+						  /*
+					  for(Socket s : socketList)
+					  {
+						  if(s == connectionSock)
+						  {
+              						DataOutputStream clientOutput = new DataOutputStream(s.getOutputStream());
+              						clientOutput.writeBytes("true");
+						  }
+					  }*/
+				  }
+				  else{
+						DataOutputStream clientOutput = new DataOutputStream(connectionSock.getOutputStream());
+              			clientOutput.writeBytes("false 1 1 1" + "\n");
+						  /*
+					  for(Socket s : socketList)
+					  {
+						  if(s == connectionSock)
+						  {
+              						DataOutputStream clientOutput = new DataOutputStream(s.getOutputStream());
+              						clientOutput.writeBytes("false");
+						  }
+					  }
+					  */
+				  }
+					again = false;
+				  break;
+			//add user case
+			  case "2":
+				  		System.out.println("WORKING10");
+				  		UserAccount newUser = new UserAccount(username, password, "HEY");
+						userList.addUser(newUser);
+              			DataOutputStream clientOutput = new DataOutputStream(connectionSock.getOutputStream());
+						clientOutput.writeBytes("SUCCESS" + "\n");
+						userList.outputStream(userList);
+						//Data
+						again = false;
+				  break;
+			//message case
+			  case "3":
+				  break;
+			  default:
+				 
+				  break;
+		  }
+	  }
           // Turn around and output this data
           // to all other clients except the one
           // that sent us this information
-          for (Socket s : socketList) {
+          /*for (Socket s : socketList) {
             if (s != connectionSock) {
               DataOutputStream clientOutput = new DataOutputStream(s.getOutputStream());
               clientOutput.writeBytes(clientText + "\n");
             }
           }
+			*/
         } else {
           // Connection was lost
           System.out.println("Closing connection for socket " + connectionSock);
@@ -58,11 +126,14 @@ public class ClientHandler implements Runnable {
           connectionSock.close();
           break;
         }
+
       }
     } catch (Exception e) {
       System.out.println("Error: " + e.toString());
       // Remove from arraylist
       socketList.remove(connectionSock);
     }
+
+	userList.outputStream(userList);
   }
 } // ClientHandler for MtServer.java
