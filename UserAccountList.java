@@ -17,7 +17,7 @@ import java.io.Serializable;
 public class UserAccountList implements Serializable
 {
 
-	ArrayList<UserAccount> users = new ArrayList<UserAccount>();
+	public ArrayList<UserAccount> users = new ArrayList<UserAccount>();
 
 	public void printList()
 	{
