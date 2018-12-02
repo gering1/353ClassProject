@@ -224,6 +224,7 @@ public class UsernameAndPass extends Application{
 				Platform.runLater(new Runnable(){
 						@Override public void run(){
 							sendMessage(userInput.getText());
+              userInput.clear();
 						}
 				});
 		});
@@ -242,6 +243,7 @@ public class UsernameAndPass extends Application{
             Platform.runLater(new Runnable(){
             @Override public void run(){
               sendMessage(userInput.getText());
+              userInput.clear();
             }
         });
         }
