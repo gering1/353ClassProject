@@ -23,4 +23,5 @@
 
 ## Planned Contributions for Next Sprint:
 -Finish Spotify implementation
+
 -Clean up GUI
