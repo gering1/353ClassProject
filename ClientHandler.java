@@ -42,21 +42,24 @@ public class ClientHandler implements Runnable {
         // Get data sent from a client
         String clientText = clientInput.readLine();
 		String[] splitText = clientText.split(" ");
-		String username = splitText[0];
-		String password = splitText[1];
-		String number = splitText[2];
+    String messageType = splitText[0];
+		String username;
+		String password;
+
 		boolean again = true;
 
 				  		System.out.println("WORKING11");
         if (clientText != null) {
           System.out.println("Received: " + clientText);
+          System.out.println("message type: " + messageType);
 	  while(again)
 	  {
-		  switch(number)
+		  switch(messageType)
 		  {
 			  //login case
 			  case "1":
-
+          username = splitText[1];
+          password = splitText[2];
 				  		System.out.println("WORKING4");
 				  if(userList.login(username, password))
 				  {
@@ -91,6 +94,8 @@ public class ClientHandler implements Runnable {
 				  break;
 			//add user case
 			  case "2":
+            username = splitText[1];
+            password = splitText[2];
 				  		System.out.println("WORKING10");
 				  		UserAccount newUser = new UserAccount(username, password, "HEY");
 						userList.addUser(newUser);
@@ -102,9 +107,17 @@ public class ClientHandler implements Runnable {
 				  break;
 			//message case
 			  case "3":
+          for (Socket s : socketList) {
+            if (s != connectionSock) {
+              clientOutput = new DataOutputStream(s.getOutputStream());
+              clientOutput.writeBytes(clientText + "\n");
+            }
+
+          }
+            again = false;
 				  break;
 			  default:
-				 
+
 				  break;
 		  }
 	  }

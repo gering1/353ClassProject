@@ -21,7 +21,6 @@ import java.util.Scanner;
 
 public class ClientListener implements Runnable {
   private Socket connectionSock = null;
-  private String msg;
   UsernameAndPass up;
 
   ClientListener(Socket sock, UsernameAndPass up) {
@@ -40,11 +39,13 @@ public class ClientListener implements Runnable {
       while (true) {
         // Get data sent from the server
         String serverText = serverInput.readLine();
+        String[] splitText = serverText.split(" ");
+        String messageType = splitText[0];
 		System.out.println("THIS IS THE SERVER TEXT: " + serverText);
         if (serverInput != null) {
           // need to get the remote user object somehow!!
           //
-			//System.out.println("WORKING5"); 
+			//System.out.println("WORKING5");
 			//System.out.println(serverText);
 
 			System.out.println("THIS IS THE SERVER TEXT: " + serverText);
@@ -54,16 +55,23 @@ public class ClientListener implements Runnable {
 			}
 			else if(serverText.equals("true 1 1 1")){
 				up.setLogin("true");
-			}	
+			}
 			else if(serverText.equals("false 1 1 1")){
 				Platform.runLater(() -> up.setLogin("false"));
 			}
 			else
 					System.out.println("YouLL never get this");
-			/*else{
-          Platform.runLater(()-> up.ta.appendText(serverText + "\n\n"));
-          msg = serverText;
-			}*/
+      if(messageType.equals("3")){
+        //chat message
+        String message = "";
+        for(int i = 1; i < splitText.length; i++)
+        {
+          message += splitText[i] + " ";
+        }
+        final String message2 = message; //
+        Platform.runLater(()-> up.ta.appendText(message2 + "\n\n"));
+      }
+
         } else {
           // Connection was lost
           System.out.println("Closing connection for socket " + connectionSock);

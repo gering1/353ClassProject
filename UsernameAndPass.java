@@ -62,8 +62,8 @@ public class UsernameAndPass extends Application{
   }
 
   private void handleLogin(String name, String password) {
-	String number = "1";
-	client.login(name, password, number);
+	String messageType = "1";
+	client.login(name, password, messageType);
    //return server.login(name, password);
    //client.connect();
    // create a user object in Main of type user class and stuff values in there

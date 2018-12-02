@@ -72,12 +72,12 @@ public class guiClient {
     	}
 	}
 
-	public void login(String username, String password, String number)
+	public void login(String username, String password, String messageType)
 	{
 		//System.out.println("WORKING7");
 
 		try{
-			String data = username + " " + password + " " + number;
+			String data = messageType + " " + username + " " + password;
 			serverOutput.writeBytes(data+ "\n");
 		} catch(NullPointerException e) {
 			System.out.println(e.getMessage());
@@ -94,7 +94,7 @@ public class guiClient {
 		try {
 			String data = message;
 			System.out.println(data);
-			serverOutput.writeBytes(data+ "\n");
+			serverOutput.writeBytes("3 " + data+ "\n"); //chat message type
 		} catch(NullPointerException e) {
 			System.out.println(e.getMessage());
 		} catch(IOException e){
@@ -102,12 +102,12 @@ public class guiClient {
 		}
 	}
 
-	public void addUser(String username, String password, String number)
+	public void addUser(String username, String password, String messageType)
 	{
 		System.out.println("WORKING9");
 
 		try{
-			String data = username + " " + password + " " + number;
+			String data = messageType + " " + username + " " + password;
 			serverOutput.writeBytes(data+ "\n");
 		} catch(NullPointerException e) {
 			System.out.println(e.getMessage());
