@@ -45,17 +45,21 @@ public class UsernameAndPass extends Application{
   Scene scene1, scene2;
   TextArea ta;
   ListView<String> usersList = new ListView<String>();
+
   //User user = new User();
   UserAccount user = new UserAccount();
   guiClient client = new guiClient(this);
-	//static UserAccountList userList = new UserAccountList();
+	static UserAccountList userList = new UserAccountList();
 	//MtServer server = new MtServer();
 	boolean loginV;
 
   public static void main(String[] args){
-	//UserAccountList userList = new UserAccountList();
 	//userList.inputObject();
-
+    //creating test users
+    UserAccount Colton = new UserAccount("colton", "colton", "123");
+    UserAccount blah = new UserAccount("blah", "blah", "123");
+    userList.addUser(Colton);
+    userList.addUser(blah);
     launch(args);
 
 	//userList.outputStream(userList);
@@ -189,15 +193,15 @@ public class UsernameAndPass extends Application{
 	private Scene createMainScene(Stage win){
 
     //populate listview with users
-    //Iterator<UserAccount> it = userList.users.iterator();
-/*
+    Iterator<UserAccount> it = userList.users.iterator();
+
     userList.printList();
 		while(it.hasNext())
 		{
         System.out.println("Test");
 				usersList.getItems().add(it.next().getUserName());
 		}
-*/
+
 		BorderPane layout2 = new BorderPane();
     HBox usersBox = new HBox();
     HBox taBox = new HBox();
@@ -254,8 +258,8 @@ public class UsernameAndPass extends Application{
     @Override
     public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         //System.out.println(newValue);
-        //UserAccount clickedUser = userList.findUser(newValue);
-        //displayProfile(clickedUser);
+        UserAccount clickedUser = userList.findUser(newValue);
+        displayProfile(clickedUser);
 
 
     }
