@@ -18,7 +18,7 @@ public class UserAccountList implements Serializable
 {
 
 	public ArrayList<UserAccount> users = new ArrayList<UserAccount>();
-
+	private boolean fileWrite = true;
 	public void printList()
 	{
 		Iterator<UserAccount> it = users.iterator();
@@ -38,7 +38,10 @@ public class UserAccountList implements Serializable
 		}
 
 		users.add(newUser);
-		outputStream();
+		if(fileWrite)
+		{
+			outputStream();
+		}
 	}
 
 	public UserAccount findUser(String uName)
@@ -67,7 +70,22 @@ public class UserAccountList implements Serializable
 						it.remove();
 				}
 		}
-		outputStream();
+		if(fileWrite)
+		{
+			outputStream();
+		}
+	}
+
+	public void stringToUserList(String data)
+	{
+		String[] userData = data.split(",");
+		for(int i = 0; i < userData.length;i++)
+		{
+			String[] uDataParts = userData[i].split(":");
+			UserAccount ua = new UserAccount();
+			ua.setUserInfo(uDataParts[0],uDataParts[1],uDataParts[2]);
+			addUser(ua);
+		}
 	}
 
 	public boolean login(String userName, String passWord)
@@ -109,6 +127,10 @@ public class UserAccountList implements Serializable
 
 	}
 
+	public void setFileWrite(boolean flag)
+	{
+		fileWrite = flag;
+	}
 	//input object from the file
 	public void inputObject()
 	{

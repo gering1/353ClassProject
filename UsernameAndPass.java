@@ -59,10 +59,13 @@ public class UsernameAndPass extends Application{
   public static void main(String[] args){
 	//userList.inputObject();
     //creating test users
+    userList.setFileWrite(false); //don't create file on client side
+    /*
     UserAccount Colton = new UserAccount("colton", "colton", "123");
     UserAccount blah = new UserAccount("blah", "blah", "123");
     userList.addUser(Colton);
     userList.addUser(blah);
+    */
     launch(args);
 
 	//userList.outputStream(userList);
@@ -134,7 +137,7 @@ public class UsernameAndPass extends Application{
    Scene secondScene = new Scene(secondaryLayout, 500, 500);
    Label userName = new Label("User Name:");
    secondaryLayout.add(userName, 0, 1);
-   
+
    /*
    Label ageL = new Label("Age");
    secondaryLayout.add(ageL, 0, 3);
@@ -229,15 +232,6 @@ public class UsernameAndPass extends Application{
 
 	private Scene createMainScene(Stage win){
 
-    //populate listview with users
-    Iterator<UserAccount> it = userList.users.iterator();
-
-    userList.printList();
-		while(it.hasNext())
-		{
-        System.out.println("Test");
-				usersList.getItems().add(it.next().getUserName());
-		}
 
 		BorderPane layout2 = new BorderPane();
     HBox usersBox = new HBox();
@@ -253,7 +247,6 @@ public class UsernameAndPass extends Application{
     usersList.setPrefWidth(200);
     usersList.setPrefHeight(50);
 
-    usersList.getItems().add("hi");
 
 		TextField userInput = new TextField();
     userInput.setPrefWidth(200);
@@ -400,4 +393,16 @@ public class UsernameAndPass extends Application{
 	{
 		return this.loginV;
 	}
+
+  public void updateViewList()
+  {
+    //populate listview with users
+    Iterator<UserAccount> it = userList.users.iterator();
+
+    while(it.hasNext())
+    {
+        usersList.getItems().add(it.next().getUserName());
+    }
+  }
+
 }

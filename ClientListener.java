@@ -55,7 +55,8 @@ public class ClientListener implements Runnable {
 					System.out.println("Added user to list");
 			}
 			else if(messageType.equals("4")){
-        System.out.println(splitText[1]);
+        up.userList.stringToUserList(splitText[1]);
+        Platform.runLater(() -> up.updateViewList());
 				Platform.runLater(() -> up.setLogin(true));
 			}
 			else if(serverText.equals("false 1 1 1")){
