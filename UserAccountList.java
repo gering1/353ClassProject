@@ -56,7 +56,7 @@ public class UserAccountList implements Serializable
 				return ua;
 			}
 		}
-		return new UserAccount();
+		return null;
 	}
 
 	public void removeUser(String userName)

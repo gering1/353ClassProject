@@ -113,7 +113,10 @@ public class UsernameAndPass extends Application{
 
    saveProfButton.setOnAction(new EventHandler<ActionEvent>() {
        @Override public void handle(ActionEvent e) {
+         UserAccount clickedUser = userList.findUser(user.getUserName());
          user.setUserName(userTextField.getText());
+         clickedUser.setUserName(user.getUserName());
+         updateViewList();
        }
    });
 
@@ -246,6 +249,7 @@ public class UsernameAndPass extends Application{
     Button editProfButton = new Button("Edit Profile");
     usersList.setPrefWidth(200);
     usersList.setPrefHeight(50);
+
 
 
 		TextField userInput = new TextField();
@@ -397,6 +401,7 @@ public class UsernameAndPass extends Application{
   public void updateViewList()
   {
     //populate listview with users
+    usersList.getItems().clear();
     Iterator<UserAccount> it = userList.users.iterator();
 
     while(it.hasNext())
