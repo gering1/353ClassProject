@@ -45,6 +45,9 @@ public class UsernameAndPass extends Application{
   Scene scene1, scene2;
   TextArea ta;
   ListView<String> usersList = new ListView<String>();
+  TextField userTextField;
+  PasswordField pwBox;
+
 
   //User user = new User();
   UserAccount user = new UserAccount();
@@ -81,19 +84,41 @@ public class UsernameAndPass extends Application{
    GridPane secondaryLayout = new GridPane();
 
    Scene secondScene = new Scene(secondaryLayout, 500, 500);
+
    Label userName = new Label("User Name:");
    secondaryLayout.add(userName, 0, 1);
    TextField userTextField = new TextField(user.getUserName());
    secondaryLayout.add(userTextField, 1, 1);
+
+   /*
+   Label ageL = new Label("Age");
+   secondaryLayout.add(ageL, 0, 3);
+   TextField ageTextField = new TextField(user.getAge().toString());
+   secondaryLayout.add(ageTextField, 1, 3);
+   */
+
    // New window (Stage)
    Stage newWindow = new Stage();
    newWindow.setTitle("Second Stage");
    newWindow.setScene(secondScene);
+
    Button saveProfButton = new Button("Save Changes");
-   secondaryLayout.add(saveProfButton,5,3);
+   secondaryLayout.add(saveProfButton,5,9);
+
+   Button exitEditButton = new Button("Exit");
+   secondaryLayout.add(exitEditButton,8,10);
+
    saveProfButton.setOnAction(new EventHandler<ActionEvent>() {
        @Override public void handle(ActionEvent e) {
          user.setUserName(userTextField.getText());
+       }
+   });
+
+   //close window when button is clicked
+   exitEditButton.setOnAction(new EventHandler<ActionEvent>() {
+       @Override public void handle(ActionEvent e) {
+         Stage stage = (Stage) exitEditButton.getScene().getWindow();
+         stage.close();
        }
    });
    // Set position of second window, related to primary window.
@@ -109,9 +134,35 @@ public class UsernameAndPass extends Application{
    Scene secondScene = new Scene(secondaryLayout, 500, 500);
    Label userName = new Label("User Name:");
    secondaryLayout.add(userName, 0, 1);
+   
+   /*
+   Label ageL = new Label("Age");
+   secondaryLayout.add(ageL, 0, 3);
+
+   TextField ageTextField = new TextField(user.getAge().toString());
+   ageTextField.setDisable(true);
+   secondaryLayout.add(ageTextField, 1, 3);
+   */
+   Button exitDisplayButton = new Button("Exit");
+   secondaryLayout.add(exitDisplayButton, 5, 5);
+
+   //close window when button is clicked
+   exitDisplayButton.setOnAction(new EventHandler<ActionEvent>() {
+       @Override public void handle(ActionEvent e) {
+         Stage stage = (Stage) exitDisplayButton.getScene().getWindow();
+         stage.close();
+       }
+   });
+
+
+
    TextField userTextField = new TextField(user.getUserName());
    userTextField.setDisable(true);
    secondaryLayout.add(userTextField, 1, 1);
+
+
+   Label age = new Label("Age");
+   secondaryLayout.add(age, 0, 3);
    // New window (Stage)
    Stage newWindow = new Stage();
    newWindow.setTitle("Second Stage");
@@ -124,6 +175,7 @@ public class UsernameAndPass extends Application{
    newWindow.show();
  }
 
+
   public Scene createLoginScene(Stage win) {
 
 	client.connect();
@@ -133,7 +185,7 @@ public class UsernameAndPass extends Application{
       grid.setHgap(10);
       grid.setVgap(10);
       grid.setPadding(new Insets(25, 25, 25, 25));
-      Button btn = new Button("Sign in");
+      Button signInBtn = new Button("Sign in");
       Button addBtn = new Button("Create user");
 
       Text scenetitle = new Text("Chat Login");
@@ -143,17 +195,17 @@ public class UsernameAndPass extends Application{
       Label userName = new Label("User Name:");
       grid.add(userName, 0, 1);
 
-      TextField userTextField = new TextField();
+      userTextField = new TextField();
       grid.add(userTextField, 1, 1);
 
       Label pw = new Label("Password:");
       grid.add(pw, 0, 2);
 
-      PasswordField pwBox = new PasswordField();
+      pwBox = new PasswordField();
       grid.add(pwBox, 1, 2);
       HBox hbBtn = new HBox(10);
       hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-      hbBtn.getChildren().add(btn);
+      hbBtn.getChildren().add(signInBtn);
       grid.add(hbBtn, 1, 4);
 
       HBox newBtn = new HBox(10);
@@ -161,25 +213,10 @@ public class UsernameAndPass extends Application{
       newBtn.getChildren().add(addBtn);
       grid.add(newBtn, 1, 5);
 
-      btn.setOnAction(e -> {
-		//client.connect();
-        handleLogin(userTextField.getText(), pwBox.getText());
-		//if(this.loginV == true){
-			Platform.runLater(new Runnable(){
-				@Override public void run(){
-					if(getLogin()){
-            			user.setUserName(userTextField.getText());
-					}
-					else{
-          				System.out.println("Login failed");
-					}
-				}
-			});
-          	window.setScene(scene2);
-          	window.setTitle("Main Chat App");
-        //} //else {
-          //System.out.println("Login failed");
-        //}
+      signInBtn.setOnAction(e -> {
+
+      handleLogin(userTextField.getText(), pwBox.getText());
+
       });
 
 	  addBtn.setOnAction(e -> {
@@ -342,15 +379,21 @@ public class UsernameAndPass extends Application{
 
 	}
 
-	public void setLogin(String login)
+	public void setLogin(boolean login)
 	{
 			System.out.println("Login is: " + login);
-		if(login.equals("true"))
+		if(login)
 		{
 				this.loginV = true;
+        user.setUserName(userTextField.getText());
+        window.setScene(scene2);
+        window.setTitle("Main Chat App");
+
 		}
 		else
 				this.loginV =false;
+        userTextField.clear();
+        pwBox.clear();
 	}
 
 	public boolean getLogin()

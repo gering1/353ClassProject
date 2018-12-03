@@ -84,7 +84,6 @@ public class guiClient {
 		} catch(IOException e){
 			System.out.println(e.getMessage());
 		}
-		//return true;
 	}
 
 	public void messageOut(String message)

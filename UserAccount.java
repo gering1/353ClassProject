@@ -55,6 +55,15 @@ public class UserAccount implements Serializable
 	{
 		this.username = username;
 	}
+	public Integer getAge()
+	{
+		return this.age;
+	}
+
+	public void setAge()
+	{
+		this.age = age;
+	}
 
 	public void setPassword(String password)
 	{

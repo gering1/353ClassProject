@@ -48,7 +48,6 @@ public class ClientHandler implements Runnable {
 
 		boolean again = true;
 
-				  		System.out.println("WORKING11");
         if (clientText != null) {
           System.out.println("Received: " + clientText);
           System.out.println("message type: " + messageType);
@@ -60,7 +59,6 @@ public class ClientHandler implements Runnable {
 			  case "1":
           username = splitText[1];
           password = splitText[2];
-				  		System.out.println("WORKING4");
 				  if(userList.login(username, password))
 				  {
 				  		System.out.println("WORKING4");
@@ -96,8 +94,7 @@ public class ClientHandler implements Runnable {
 			  case "2":
             username = splitText[1];
             password = splitText[2];
-				  		System.out.println("WORKING10");
-				  		UserAccount newUser = new UserAccount(username, password, "HEY");
+				  	UserAccount newUser = new UserAccount(username, password, "HEY");
 						userList.addUser(newUser);
               			DataOutputStream clientOutput = new DataOutputStream(connectionSock.getOutputStream());
 						clientOutput.writeBytes("SUCCESS" + "\n");

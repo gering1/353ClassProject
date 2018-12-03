@@ -54,10 +54,10 @@ public class ClientListener implements Runnable {
 					System.out.println("Added user to list");
 			}
 			else if(serverText.equals("true 1 1 1")){
-				up.setLogin("true");
+				Platform.runLater(() -> up.setLogin(true));
 			}
 			else if(serverText.equals("false 1 1 1")){
-				Platform.runLater(() -> up.setLogin("false"));
+				Platform.runLater(() -> up.setLogin(false));
 			}
 			else
 					System.out.println("YouLL never get this");
