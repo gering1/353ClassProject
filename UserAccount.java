@@ -39,8 +39,7 @@ public class UserAccount implements Serializable
 
 	public String toString()
 	{
-		return("\nUsername : " + username + "\n Password : " + password +
-			       	"\n authentication code : " + authenticationCode);
+		return(username + ":" + password + ":" + authenticationCode);
 
 	}
 

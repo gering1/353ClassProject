@@ -77,6 +77,5 @@ public class MtServer {
 	userList.inputObject();
     MtServer server = new MtServer();
     server.getConnection();
-	userList.outputStream(userList);
   }
 } // MtServer

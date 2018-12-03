@@ -38,7 +38,7 @@ public class UserAccountList implements Serializable
 		}
 
 		users.add(newUser);
-		//outputStream();
+		outputStream();
 	}
 
 	public UserAccount findUser(String uName)
@@ -67,7 +67,7 @@ public class UserAccountList implements Serializable
 						it.remove();
 				}
 		}
-		//outputStream();
+		outputStream();
 	}
 
 	public boolean login(String userName, String passWord)
@@ -88,14 +88,14 @@ public class UserAccountList implements Serializable
 			return false;
 	}
 
-	public void outputStream(UserAccountList user)
+	public void outputStream()
 	{
 		try
 		{
 			ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("Users"));
 
 			System.out.println("Working");
-			outputStream.writeObject(user);
+			outputStream.writeObject(this);
 			System.out.println("Working");
 			//System.out.println(this.accountAmount);
 
@@ -137,5 +137,24 @@ public class UserAccountList implements Serializable
 		}
 
 	}
-
+ 	public String toString()
+	{
+		String result = "";
+		Iterator<UserAccount> it = users.iterator();
+		UserAccount ua;
+		boolean first = true;
+		while(it.hasNext())
+		{
+			if(first)
+			{
+				result = it.next().toString();
+				first = false;
+			}
+			else
+			{
+				result += "," + it.next().toString();
+			}
+		}
+		return result;
+	}
 }

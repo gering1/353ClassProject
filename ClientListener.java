@@ -41,6 +41,7 @@ public class ClientListener implements Runnable {
         String serverText = serverInput.readLine();
         String[] splitText = serverText.split(" ");
         String messageType = splitText[0];
+
 		System.out.println("THIS IS THE SERVER TEXT: " + serverText);
         if (serverInput != null) {
           // need to get the remote user object somehow!!
@@ -53,7 +54,8 @@ public class ClientListener implements Runnable {
 			{
 					System.out.println("Added user to list");
 			}
-			else if(serverText.equals("true 1 1 1")){
+			else if(messageType.equals("4")){
+        System.out.println(splitText[1]);
 				Platform.runLater(() -> up.setLogin(true));
 			}
 			else if(serverText.equals("false 1 1 1")){
