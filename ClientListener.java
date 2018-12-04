@@ -48,7 +48,33 @@ public class ClientListener implements Runnable {
           //
 			//System.out.println("WORKING5");
 			//System.out.println(serverText);
-
+          switch(messageType)
+          {
+            case "3": //chat message from server
+              String message = "";
+              for(int i = 1; i < splitText.length; i++)
+              {
+                message += splitText[i] + " ";
+              }
+              final String message2 = message; //
+              Platform.runLater(()-> up.ta.appendText(message2 + "\n\n"));
+              break;
+            case "4": //login succeeded
+              up.userList.stringToUserList(splitText[1]);
+              Platform.runLater(() -> up.updateViewList());
+              Platform.runLater(() -> up.setLogin(true));
+              break;
+            case "5": //login failed
+              Platform.runLater(() -> up.setLogin(false));
+              break;
+            case "8": //update to userlist from server
+              up.userList.stringToUserList(splitText[1]);
+              Platform.runLater(() -> up.updateViewList());
+              break;
+            default:
+              break;
+          }
+          /*
 			System.out.println("THIS IS THE SERVER TEXT: " + serverText);
 			if(serverText.equals("SUCCESS"))
 			{
@@ -75,6 +101,7 @@ public class ClientListener implements Runnable {
         Platform.runLater(()-> up.ta.appendText(message2 + "\n\n"));
       }
 
+*/
         } else {
           // Connection was lost
           System.out.println("Closing connection for socket " + connectionSock);
@@ -82,9 +109,13 @@ public class ClientListener implements Runnable {
           break;
         }
       }
+    /*
 	  System.out.println("WE NEVRE GER HERE");
-    } catch (Exception e) {
+    }
+    */
+  }
+    catch (Exception e) {
       System.out.println("Error: " + e.toString());
     }
-  }
+}
 } // ClientListener for MtClient

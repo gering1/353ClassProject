@@ -76,9 +76,21 @@ public class UserAccountList implements Serializable
 		}
 	}
 
+	public void updateUserFromString(String oldName, String newData)
+	{
+		UserAccount ua = findUser(oldName);
+		if(ua != null)
+		{
+			String[] userParts = newData.split(":");
+			ua.setUserInfo(userParts[0],userParts[1],userParts[2]);
+		}
+
+	}
+
 	public void stringToUserList(String data)
 	{
 		String[] userData = data.split(",");
+		users.clear();
 		for(int i = 0; i < userData.length;i++)
 		{
 			String[] uDataParts = userData[i].split(":");
@@ -86,6 +98,7 @@ public class UserAccountList implements Serializable
 			ua.setUserInfo(uDataParts[0],uDataParts[1],uDataParts[2]);
 			addUser(ua);
 		}
+		outputStream()
 	}
 
 	public boolean login(String userName, String passWord)

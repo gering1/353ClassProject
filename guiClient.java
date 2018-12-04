@@ -86,10 +86,22 @@ public class guiClient {
 		}
 	}
 
+  public void updateUser(String oldName, String newData)
+  {
+
+  try {
+    String message = "7 " + oldName + newData;
+    serverOutput.writeBytes("7 " + message + "\n"); //chat message type
+  } catch(NullPointerException e) {
+    System.out.println(e.getMessage());
+  } catch(IOException e){
+    System.out.println(e.getMessage());
+  }
+  }
+
 	public void messageOut(String message)
 	{
 
-			System.out.println("WORKING1");
 		try {
 			String data = message;
 			System.out.println(data);

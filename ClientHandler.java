@@ -51,8 +51,6 @@ public class ClientHandler implements Runnable {
         if (clientText != null) {
           System.out.println("Received: " + clientText);
           System.out.println("message type: " + messageType);
-          //while(again)
-          //{
             switch(messageType)
             {
               //login case
@@ -62,33 +60,13 @@ public class ClientHandler implements Runnable {
               if(userList.login(username, password))
               {
                 DataOutputStream clientOutput = new DataOutputStream(connectionSock.getOutputStream());
-                //clientOutput.writeBytes("true 1 1 1" + "\n");
                 String message = userList.toString();
                 clientOutput.writeBytes("4 " + message + "\n");
 
-                /*
-                for(Socket s : socketList)
-                {
-                if(s == connectionSock)
-                {
-                DataOutputStream clientOutput = new DataOutputStream(s.getOutputStream());
-                clientOutput.writeBytes("true");
-              }
-            }*/
           }
           else{
             DataOutputStream clientOutput = new DataOutputStream(connectionSock.getOutputStream());
-            clientOutput.writeBytes("false 1 1 1" + "\n");
-            /*
-            for(Socket s : socketList)
-            {
-            if(s == connectionSock)
-            {
-            DataOutputStream clientOutput = new DataOutputStream(s.getOutputStream());
-            clientOutput.writeBytes("false");
-          }
-        }
-        */
+            clientOutput.writeBytes("8 " + "\n");
       }
       again = false;
       break;
@@ -98,8 +76,14 @@ public class ClientHandler implements Runnable {
       password = splitText[2];
       UserAccount newUser = new UserAccount(username, password, "HEY");
       userList.addUser(newUser);
-      DataOutputStream clientOutput = new DataOutputStream(connectionSock.getOutputStream());
-      clientOutput.writeBytes("SUCCESS" + "\n");
+      DataOutputStream clientOutput;
+      String message = userList.toString();
+      for (Socket s : socketList) {
+        if (s != connectionSock) {
+          clientOutput = new DataOutputStream(s.getOutputStream());
+          clientOutput.writeBytes("8 " + message + "\n");
+        }
+      }
 
       //Data
       again = false;
@@ -113,23 +97,28 @@ public class ClientHandler implements Runnable {
         }
 
       }
-      again = false;
       break;
+
+      case "7":
+      userList.updateUserFromString(splitText[1],splitText[2]);
+      String msg = userList.toString();
+      System.out.println("In case 7 " + msg);
+      for (Socket s : socketList) {
+        if (s != connectionSock) {
+          clientOutput = new DataOutputStream(s.getOutputStream());
+          clientOutput.writeBytes("8 " + msg + "\n");
+        }
+      }
+      break;
+
       default:
 
       break;
     }
-  //}
   // Turn around and output this data
   // to all other clients except the one
   // that sent us this information
-  /*for (Socket s : socketList) {
-  if (s != connectionSock) {
-  DataOutputStream clientOutput = new DataOutputStream(s.getOutputStream());
-  clientOutput.writeBytes(clientText + "\n");
-}
-}
-*/
+
 } else {
   // Connection was lost
   System.out.println("Closing connection for socket " + connectionSock);

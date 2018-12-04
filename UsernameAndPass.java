@@ -114,9 +114,14 @@ public class UsernameAndPass extends Application{
    saveProfButton.setOnAction(new EventHandler<ActionEvent>() {
        @Override public void handle(ActionEvent e) {
          UserAccount clickedUser = userList.findUser(user.getUserName());
-         user.setUserName(userTextField.getText());
-         clickedUser.setUserName(user.getUserName());
-         updateViewList();
+         if(clickedUser != null)
+         {
+           String oldName = user.getUserName();
+           user.setUserName(userTextField.getText());
+           clickedUser.setUserName(user.getUserName());
+           updateViewList();
+           client.updateUser(oldName, clickedUser.toString());
+        }
        }
    });
 
