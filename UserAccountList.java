@@ -98,7 +98,7 @@ public class UserAccountList implements Serializable
 			ua.setUserInfo(uDataParts[0],uDataParts[1],uDataParts[2]);
 			addUser(ua);
 		}
-		outputStream()
+		outputStream();
 	}
 
 	public boolean login(String userName, String passWord)

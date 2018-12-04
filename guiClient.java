@@ -90,7 +90,7 @@ public class guiClient {
   {
 
   try {
-    String message = "7 " + oldName + newData;
+    String message = oldName + " " + newData;
     serverOutput.writeBytes("7 " + message + "\n"); //chat message type
   } catch(NullPointerException e) {
     System.out.println(e.getMessage());
