@@ -74,7 +74,7 @@ public class ClientHandler implements Runnable {
       case "2":
       username = splitText[1];
       password = splitText[2];
-      UserAccount newUser = new UserAccount(username, password, "HEY");
+      UserAccount newUser = new UserAccount(username, password, "HEY","None","None");
       userList.addUser(newUser);
       DataOutputStream clientOutput;
       String message = userList.toString();

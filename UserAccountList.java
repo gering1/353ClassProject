@@ -82,7 +82,7 @@ public class UserAccountList implements Serializable
 		if(ua != null)
 		{
 			String[] userParts = newData.split(":");
-			ua.setUserInfo(userParts[0],userParts[1],userParts[2]);
+			ua.setUserInfo(userParts[0],userParts[1],userParts[2],userParts[3],userParts[4]);
 		}
 
 	}
@@ -95,7 +95,7 @@ public class UserAccountList implements Serializable
 		{
 			String[] uDataParts = userData[i].split(":");
 			UserAccount ua = new UserAccount();
-			ua.setUserInfo(uDataParts[0],uDataParts[1],uDataParts[2]);
+			ua.setUserInfo(uDataParts[0],uDataParts[1],uDataParts[2],uDataParts[3],uDataParts[4]);
 			addUser(ua);
 		}
 		outputStream();

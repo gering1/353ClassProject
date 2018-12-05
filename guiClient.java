@@ -101,7 +101,6 @@ public class guiClient {
 
 	public void messageOut(String message)
 	{
-
 		try {
 			String data = message;
 			System.out.println(data);
@@ -115,8 +114,6 @@ public class guiClient {
 
 	public void addUser(String username, String password, String messageType)
 	{
-		System.out.println("WORKING9");
-
 		try{
 			String data = messageType + " " + username + " " + password;
 			serverOutput.writeBytes(data+ "\n");
