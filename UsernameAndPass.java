@@ -202,7 +202,7 @@ private javafx.scene.image.Image createImage(String url)  throws IOException
     return new javafx.scene.image.Image(stream);
 }
 
-public void displayProfile(UserAccount user)
+public void displayProfile(UserAccount ua)
  {
    GridPane secondaryLayout = new GridPane();
    secondaryLayout.setPadding(new Insets(10, 10, 10, 10));
@@ -215,8 +215,15 @@ public void displayProfile(UserAccount user)
    Label userName = new Label("User Name:");
    secondaryLayout.add(userName, 0, 0);
 
-   TextField userTextField = new TextField(user.getUserName());
-   userTextField.setDisable(true);
+   TextField userTextField = new TextField(ua.getUserName());
+   if(ua.getUserName().equals(user.getUserName()))
+   {
+     userTextField.setDisable(false);
+   }
+   else
+   {
+     userTextField.setDisable(true);
+   }
    secondaryLayout.add(userTextField, 1, 0);
 
    Label trackLabel = new Label("Track:");
@@ -234,6 +241,33 @@ public void displayProfile(UserAccount user)
    //TextField albumField = new TextField ("Artist: None");
    Text albumText = new Text("No Album");
    secondaryLayout.add(albumText, 1, 3);
+
+   Button saveProfButton = new Button("Save Changes");
+   if(ua.getUserName().equals(user.getUserName()))
+   {
+     saveProfButton.setDisable(false);
+   }
+   else
+   {
+     saveProfButton.setDisable(true);
+   }
+   secondaryLayout.add(saveProfButton,4,5);
+
+   //if(user.getUserName() )
+
+   saveProfButton.setOnAction(new EventHandler<ActionEvent>() {
+       @Override public void handle(ActionEvent e) {
+         UserAccount clickedUser = userList.findUser(user.getUserName());
+         if(clickedUser != null)
+         {
+           String oldName = user.getUserName();
+           user.setUserName(userTextField.getText());
+           clickedUser.setUserName(user.getUserName());
+           updateViewList();
+           client.updateUser(oldName, clickedUser.toString());
+        }
+       }
+   });
 
 
    Button spotifyDisplayButton = new Button("Get Spotify Info");
@@ -381,7 +415,8 @@ public void displayProfile(UserAccount user)
     editProfButton.setOnAction(new EventHandler<ActionEvent>() {
         @Override public void handle(ActionEvent e) {
           //open window to edit profile
-          editProfile(user);
+          //editProfile(user);
+          displayProfile(user);
 
         }
     });
