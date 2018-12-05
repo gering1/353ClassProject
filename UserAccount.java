@@ -5,8 +5,8 @@ public class UserAccount implements Serializable
 	private String username;
 	private String password;
 	private Integer age;
-	private String artist = "";
-	private String track = "";
+	private String artist = "x";
+	private String track = "x";
 	private String authenticationCode;
 
 

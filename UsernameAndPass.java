@@ -13,6 +13,11 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.scene.image.ImageView;
+import com.wrapper.spotify.model_objects.specification.Track;
+import com.wrapper.spotify.model_objects.specification.Image;
+import java.net.URL;
+import java.net.URLConnection;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -47,7 +52,7 @@ public class UsernameAndPass extends Application{
   ListView<String> usersList = new ListView<String>();
   TextField userTextField;
   PasswordField pwBox;
-
+  boolean spotifyCreds = false;
 
   //User user = new User();
   UserAccount user = new UserAccount();
@@ -138,7 +143,7 @@ public class UsernameAndPass extends Application{
 
    newWindow.show();
  }
-
+/*
  public void displayProfile(UserAccount user)
  {
    GridPane secondaryLayout = new GridPane();
@@ -146,16 +151,16 @@ public class UsernameAndPass extends Application{
    Label userName = new Label("User Name:");
    secondaryLayout.add(userName, 0, 1);
 
-   /*
-   Label ageL = new Label("Age");
-   secondaryLayout.add(ageL, 0, 3);
 
-   TextField ageTextField = new TextField(user.getAge().toString());
-   ageTextField.setDisable(true);
-   secondaryLayout.add(ageTextField, 1, 3);
-   */
-   Button exitDisplayButton = new Button("Exit");
-   secondaryLayout.add(exitDisplayButton, 5, 5);
+   //Label ageL = new Label("Age");
+   //secondaryLayout.add(ageL, 0, 3);
+
+   //TextField ageTextField = new TextField(user.getAge().toString());
+   //ageTextField.setDisable(true);
+   //secondaryLayout.add(ageTextField, 1, 3);
+
+   //Button exitDisplayButton = new Button("Exit");
+   //secondaryLayout.add(exitDisplayButton, 5, 5);
 
    //close window when button is clicked
    exitDisplayButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -184,6 +189,107 @@ public class UsernameAndPass extends Application{
    newWindow.setY(scene1.getY() + 100);
 
    newWindow.show();
+ }
+*/
+// Create a javafx Image from a url
+  // Taken from stack overflow example
+  //
+private javafx.scene.image.Image createImage(String url)  throws IOException
+{
+    URLConnection conn = new URL(url).openConnection();
+    conn.setRequestProperty("User-Agent", "Wget/1.13.4 (linux-gnu)");
+    InputStream stream = conn.getInputStream();
+    return new javafx.scene.image.Image(stream);
+}
+
+public void displayProfile(UserAccount user)
+ {
+   GridPane secondaryLayout = new GridPane();
+   secondaryLayout.setPadding(new Insets(10, 10, 10, 10));
+
+      //Setting the vertical and horizontal gaps between the columns
+      secondaryLayout.setVgap(10);
+      secondaryLayout.setHgap(5);
+
+   Scene secondScene = new Scene(secondaryLayout, 500, 500);
+   Label userName = new Label("User Name:");
+   secondaryLayout.add(userName, 0, 0);
+
+   TextField userTextField = new TextField(user.getUserName());
+   userTextField.setDisable(true);
+   secondaryLayout.add(userTextField, 1, 0);
+
+   Label trackLabel = new Label("Track:");
+   TextField trackField = new TextField();
+   //trackField.setDisable(true);
+   secondaryLayout.add(trackLabel, 0, 1);
+   secondaryLayout.add(trackField, 1, 1);
+
+   Label artistLabel = new Label("Artist:");
+   TextField artistField = new TextField();
+   //trackField.setDisable(true);
+   secondaryLayout.add(artistLabel, 0, 2);
+   secondaryLayout.add(artistField, 1, 2);
+
+   //TextField albumField = new TextField ("Artist: None");
+   Text albumText = new Text("No Album");
+   secondaryLayout.add(albumText, 1, 3);
+
+
+   Button spotifyDisplayButton = new Button("Get Spotify Info");
+   secondaryLayout.add(spotifyDisplayButton, 5, 0);
+   spotifyDisplayButton.setOnAction(new EventHandler<ActionEvent>() {
+       @Override public void handle(ActionEvent e) {
+         //get the spotify info
+
+        SpotifySearch ss = new SpotifySearch();
+        if (!spotifyCreds){
+          ss.clientCredentials_Sync();
+          spotifyCreds = true;
+        }
+        //Track [] tracks = ss.searchTracks_Sync("Eruption");
+        Track [] tracks = ss.searchTracks_Sync("mr brightside");
+
+        String album  = tracks[0].getAlbum().getName();
+        Image []albumImage = tracks[0].getAlbum().getImages();
+        javafx.scene.image.Image im = null;
+        try {
+           im = createImage(albumImage[0].getUrl());
+        } catch (Exception ex) {}
+        if (tracks != null){
+          ImageView iv= new ImageView(im);
+          iv.setFitHeight(150);
+          iv.setFitWidth(150);
+          secondaryLayout.add(iv, 3,3);
+          albumText.setText(album);
+          System.out.println(" ALBUM = " + album);
+          System.out.println(" IMAGE = "+ albumImage[0].getUrl());
+        } else {
+          System.out.println("No Tracks FOUND!!");
+        }
+       }
+   });
+   Button exitDisplayButton = new Button("Close");
+   secondaryLayout.add(exitDisplayButton, 5, 5);
+
+   //close window when button is clicked
+   exitDisplayButton.setOnAction(new EventHandler<ActionEvent>() {
+       @Override public void handle(ActionEvent e) {
+         Stage stage = (Stage) exitDisplayButton.getScene().getWindow();
+         stage.close();
+       }
+   });
+
+   Stage newWindow = new Stage();
+   newWindow.setTitle("Second Stage");
+   newWindow.setScene(secondScene);
+
+   // Set position of second window, related to primary window.
+   newWindow.setX(scene1.getX() + 200);
+   newWindow.setY(scene1.getY() + 100);
+
+   newWindow.show();
+
  }
 
 
@@ -386,8 +492,20 @@ public class UsernameAndPass extends Application{
 			System.out.println("Login is: " + login);
 		if(login)
 		{
-				this.loginV = true;
+        this.loginV = true;
         user.setUserName(userTextField.getText());
+        /*
+        UserAccount ua = null;
+        //UserAccount ua = userList.findUser(user.getUserName());
+        if(ua != null)
+        {
+          user.setTrack(ua.getTrack());
+        }
+        else
+        {
+          System.out.println("Didn't find user " + user.getUserName());
+        }
+        */
         window.setScene(scene2);
         window.setTitle("Main Chat App");
 
