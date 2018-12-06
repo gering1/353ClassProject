@@ -282,7 +282,8 @@ public void displayProfile(UserAccount ua)
           spotifyCreds = true;
         }
         //Track [] tracks = ss.searchTracks_Sync("Eruption");
-        Track [] tracks = ss.searchTracks_Sync("mr brightside");
+        user.setTrack(trackField.getText());
+        Track [] tracks = ss.searchTracks_Sync(user.getTrack());
 
         String album  = tracks[0].getAlbum().getName();
         Image []albumImage = tracks[0].getAlbum().getImages();
