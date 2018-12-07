@@ -1,8 +1,9 @@
-//Charlie Raymond, Colton Gering, CPSC353 MWF 9-10am, Michael Fahy
-//Final project
-//this file is where the GUI is implemented. It provides an interface
-//for the user to use to login to the chatroom, chat between users 
-//and access spotify
+/*Charlie Raymond, Colton Gering, CPSC353 MWF 9-10am, Michael Fahy
+Final project
+this file is where the GUI is implemented. It provides an interface
+for the user to use to login to the chatroom, chat between users 
+and access spotify
+*/
 
 
 import javafx.application.Application;
@@ -83,8 +84,9 @@ public class UsernameAndPass extends Application{
 		client.login(name, password, messageType);
 	}
 
-	//A form for the gui which occurs when the edit button is pressed
-	//allows the user to change their username
+	/*A form for the gui which occurs when the edit button is pressed
+	 *allows the user to change their username
+	*/
 	public void editProfile(UserAccount user)
 	{
    		//allows user to change profile settings and save
@@ -139,54 +141,6 @@ public class UsernameAndPass extends Application{
    		newWindow.show();
 
  	}
-/*
- public void displayProfile(UserAccount user)
- {
-   GridPane secondaryLayout = new GridPane();
-   Scene secondScene = new Scene(secondaryLayout, 500, 500);
-   Label userName = new Label("User Name:");
-   secondaryLayout.add(userName, 0, 1);
-
-
-   //Label ageL = new Label("Age");
-   //secondaryLayout.add(ageL, 0, 3);
-
-   //TextField ageTextField = new TextField(user.getAge().toString());
-   //ageTextField.setDisable(true);
-   //secondaryLayout.add(ageTextField, 1, 3);
-
-   //Button exitDisplayButton = new Button("Exit");
-   //secondaryLayout.add(exitDisplayButton, 5, 5);
-
-   //close window when button is clicked
-   exitDisplayButton.setOnAction(new EventHandler<ActionEvent>() {
-       @Override public void handle(ActionEvent e) {
-         Stage stage = (Stage) exitDisplayButton.getScene().getWindow();
-         stage.close();
-       }
-   });
-
-
-
-   TextField userTextField = new TextField(user.getUserName());
-   userTextField.setDisable(true);
-   secondaryLayout.add(userTextField, 1, 1);
-
-
-   Label age = new Label("Age");
-   secondaryLayout.add(age, 0, 3);
-   // New window (Stage)
-   Stage newWindow = new Stage();
-   newWindow.setTitle("Second Stage");
-   newWindow.setScene(secondScene);
-
-   // Set position of second window, related to primary window.
-   newWindow.setX(scene1.getX() + 200);
-   newWindow.setY(scene1.getY() + 100);
-
-   newWindow.show();
- }
-*/
 // Create a javafx Image from a url
   // Taken from stack overflow example
   //
@@ -333,8 +287,9 @@ public class UsernameAndPass extends Application{
 
 
 	/*this is the first form that shows, it allows a user to create an account
-	and also allows them to login to the chat server. Sends data to server and server
-   	responds 	*/
+	 *and also allows them to login to the chat server. Sends data to server and server
+   	 *responds 	
+	*/
 	public Scene createLoginScene(Stage win) {
 		
 		client.connect();				//once login form is opened, immediately we start connection with server
