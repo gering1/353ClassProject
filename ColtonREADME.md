@@ -25,3 +25,14 @@
 -Finish Spotify implementation
 
 -Clean up GUI
+
+## Complete contributions:
+-Worked on login gui and chat gui
+
+-View and edit profiles
+
+-Login authentication
+
+-
+
+-Spotify implementation-search and save favorite song
