@@ -1,6 +1,8 @@
 /**
  * MTClient.java
  *
+ *Charlie Raymond, Colton Gering, CPSC353 MWF 9-10am, Michael Fahy
+ *
  * This program implements a simple multithreaded chat client.  It connects to the
  * server (assumed to be localhost on port 7654) and starts two threads:
  * one for listening for data sent from the server, and another that waits
@@ -37,23 +39,24 @@ public class guiClient {
    * main method.
    * @params not used.
    */
-  UsernameAndPass up;
-
+  	UsernameAndPass up;
 	static DataOutputStream serverOutput;
 
 
+	//constructor which initializes the gui
+  	public guiClient(UsernameAndPass up)
+  	{
+    	this.up = up;
+  	}
 
-  public guiClient(UsernameAndPass up)
-  {
-    this.up = up;
-  }
 
+	//connects to the server, assuming port 7654, and ip
 	public void connect()
 	{
-			System.out.println("WORKING1");
     	try {
-
-      		String hostname = "localhost";
+		
+      	//	String hostname = "localhost"; 
+      		String hostname = "172.17.0.1";
       		int port = 7654;
 
       		System.out.println("Connecting to server on port " + port);
@@ -72,10 +75,9 @@ public class guiClient {
     	}
 	}
 
+	//this takes login information and sends it to the server to check
 	public void login(String username, String password, String messageType)
 	{
-		//System.out.println("WORKING7");
-
 		try{
 			String data = messageType + " " + username + " " + password;
 			serverOutput.writeBytes(data+ "\n");
@@ -86,19 +88,21 @@ public class guiClient {
 		}
 	}
 
-  public void updateUser(String oldName, String newData)
-  {
+	//this sends user information to the server to save to the user
+  	public void updateUser(String oldName, String newData)
+  	{
 
-  try {
-    String message = oldName + " " + newData;
-    serverOutput.writeBytes("7 " + message + "\n"); //chat message type
-  } catch(NullPointerException e) {
-    System.out.println(e.getMessage());
-  } catch(IOException e){
-    System.out.println(e.getMessage());
-  }
-  }
+  		try {
+    		String message = oldName + " " + newData;
+    		serverOutput.writeBytes("7 " + message + "\n"); //chat message type
+  		} catch(NullPointerException e) {
+    		System.out.println(e.getMessage());
+  		} catch(IOException e){
+    		System.out.println(e.getMessage());
+  		}
+  	}
 
+	//sends the users message out to the server to send to all
 	public void messageOut(String message)
 	{
 		try {
@@ -112,6 +116,7 @@ public class guiClient {
 		}
 	}
 
+	//this sends user information to the server to add to the list of users
 	public void addUser(String username, String password, String messageType)
 	{
 		try{
