@@ -25,3 +25,24 @@
 -Finish Spotify implementation
 
 -Clean up GUI
+
+## Complete contributions:
+-Worked on login gui and chat gui
+
+-View and edit profiles logic and GUIS
+
+-Login authentication
+
+-Spotify implementation-search and save favorite song
+
+-Worked on adding/editing users (GUI and message logic in clientListener and clientHandler)
+
+-Added username to chat message
+
+-Figured out how to do multi-stages with javaFX
+
+-Fixed up serialization to stop corruption bugs
+
+
+
+
