@@ -1,6 +1,9 @@
 /**
  * ClientListener.java
  *
+ *Charlie Raymond, Colton Gering, CPSC353 MWF 9-10am, Michael Fahy
+ *
+ *
  * This class runs on the client end and just
  * displays any text received from the server.
  *
@@ -19,103 +22,70 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 
+
+//Client Listener class which implements runnable
 public class ClientListener implements Runnable {
-  private Socket connectionSock = null;
-  UsernameAndPass up;
+  	private Socket connectionSock = null;
+  	UsernameAndPass up;
 
-  ClientListener(Socket sock, UsernameAndPass up) {
-    this.connectionSock = sock;
-    this.up = up;
 
-  }
+	//constructor to initialize variables
+  	ClientListener(Socket sock, UsernameAndPass up) {
+    	this.connectionSock = sock;
+    	this.up = up;
+
+  	}
 
   /**
-   * Gets message from server and dsiplays it to the user.
+   * Gets message from server and replays information back to client
    */
-  public void run() {
-    try {
-      BufferedReader serverInput = new BufferedReader(
-          new InputStreamReader(connectionSock.getInputStream()));
-      while (true) {
-        // Get data sent from the server
-        String serverText = serverInput.readLine();
-        String[] splitText = serverText.split(" ");
-        String messageType = splitText[0];
+ 	public void run() {
+   		try {
+      		BufferedReader serverInput = new BufferedReader(
+          	new InputStreamReader(connectionSock.getInputStream()));
+      		while (true) {
+        		// Get data sent from the server
+        		String serverText = serverInput.readLine();
+        		String[] splitText = serverText.split(" ");
+        		String messageType = splitText[0];
 
-		System.out.println("THIS IS THE SERVER TEXT: " + serverText);
-        if (serverInput != null) {
-          // need to get the remote user object somehow!!
-          //
-			//System.out.println("WORKING5");
-			//System.out.println(serverText);
-          switch(messageType)
-          {
-            case "3": //chat message from server
-              String message = "";
-              for(int i = 1; i < splitText.length; i++)
-              {
-                message += splitText[i] + " ";
-              }
-              final String message2 = message; //
-              Platform.runLater(()-> up.ta.appendText(message2 + "\n\n"));
-              break;
-            case "4": //login succeeded
-              up.userList.stringToUserList(splitText[1]);
-              Platform.runLater(() -> up.updateViewList());
-              Platform.runLater(() -> up.setLogin(true));
-              break;
-            case "5": //login failed
-              Platform.runLater(() -> up.setLogin(false));
-              break;
-            case "8": //update to userlist from server
-              up.userList.stringToUserList(splitText[1]);
-              Platform.runLater(() -> up.updateViewList());
-              break;
-            default:
-              break;
-          }
-          /*
-			System.out.println("THIS IS THE SERVER TEXT: " + serverText);
-			if(serverText.equals("SUCCESS"))
-			{
-					System.out.println("Added user to list");
-			}
-			else if(messageType.equals("4")){
-        up.userList.stringToUserList(splitText[1]);
-        Platform.runLater(() -> up.updateViewList());
-				Platform.runLater(() -> up.setLogin(true));
-			}
-			else if(serverText.equals("false 1 1 1")){
-				Platform.runLater(() -> up.setLogin(false));
-			}
-			else
-					System.out.println("YouLL never get this");
-      if(messageType.equals("3")){
-        //chat message
-        String message = "";
-        for(int i = 1; i < splitText.length; i++)
-        {
-          message += splitText[i] + " ";
-        }
-        final String message2 = message; //
-        Platform.runLater(()-> up.ta.appendText(message2 + "\n\n"));
-      }
-
-*/
-        } else {
-          // Connection was lost
-          System.out.println("Closing connection for socket " + connectionSock);
-          connectionSock.close();
-          break;
-        }
-      }
-    /*
-	  System.out.println("WE NEVRE GER HERE");
-    }
-    */
-  }
-    catch (Exception e) {
-      System.out.println("Error: " + e.toString());
-    }
-}
+				System.out.println("THIS IS THE SERVER TEXT: " + serverText);
+        		if (serverInput != null) {
+          			switch(messageType)
+          			{
+            			case "3": //chat message from server
+              				String message = "";
+              				for(int i = 1; i < splitText.length; i++)
+              				{
+                				message += splitText[i] + " ";
+              				}
+              				final String message2 = message; //
+              				Platform.runLater(()-> up.ta.appendText(message2 + "\n\n"));
+              				break;
+            			case "4": //login succeeded
+              				up.userList.stringToUserList(splitText[1]);
+              				Platform.runLater(() -> up.updateViewList());
+              				Platform.runLater(() -> up.setLogin(true));
+              				break;
+            			case "5": //login failed
+              				Platform.runLater(() -> up.setLogin(false));
+              				break;
+            			case "8": //update to userlist from server
+              				up.userList.stringToUserList(splitText[1]);
+              				Platform.runLater(() -> up.updateViewList());
+              				break;
+            			default:
+              				break;
+          			}
+        		} else {
+          			// Connection was lost
+          			System.out.println("Closing connection for socket " + connectionSock);
+          			connectionSock.close();
+          			break;
+        		}
+      		}
+  		}catch (Exception e) {
+      		System.out.println("Error: " + e.toString());
+    	}
+	}
 } // ClientListener for MtClient
