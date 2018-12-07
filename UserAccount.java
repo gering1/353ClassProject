@@ -59,7 +59,8 @@ public class UserAccount implements Serializable
 	//to string method
 	public String toString()
 	{
-		return(username + ":" + password + ":" + authenticationCode + ":" + track + ":" + artist);
+		String trackS = track.replaceAll(" ","%20");
+		return(username + ":" + password + ":" + authenticationCode + ":" + trackS + ":" + artist);
 	}
 
 
@@ -85,7 +86,7 @@ public class UserAccount implements Serializable
 
 	public String getTrack()
 	{
-		return this.track;
+		return this.track.replaceAll("%20"," ");
 	}
 	public void setTrack(String trck)
 	{

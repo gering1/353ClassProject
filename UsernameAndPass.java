@@ -1,7 +1,7 @@
 /*Charlie Raymond, Colton Gering, CPSC353 MWF 9-10am, Michael Fahy
 Final project
 this file is where the GUI is implemented. It provides an interface
-for the user to use to login to the chatroom, chat between users 
+for the user to use to login to the chatroom, chat between users
 and access spotify
 */
 
@@ -104,7 +104,7 @@ public class UsernameAndPass extends Application{
    		Stage newWindow = new Stage();
    		newWindow.setTitle("Second Stage");
    		newWindow.setScene(secondScene);
-		
+
    		Button saveProfButton = new Button("Save Changes");
    		secondaryLayout.add(saveProfButton,5,9);
 
@@ -183,19 +183,19 @@ public class UsernameAndPass extends Application{
    		}
 
    		secondaryLayout.add(userTextField, 1, 0);
-	
+
 		//this is all gui layout for the display profile form
    		Label trackLabel = new Label("Track:");
-   		TextField trackField = new TextField();
+   		TextField trackField = new TextField(ua.getTrack());
 
    		secondaryLayout.add(trackLabel, 0, 1);
    		secondaryLayout.add(trackField, 1, 1);
 
-   		Label artistLabel = new Label("Artist:");
-   		TextField artistField = new TextField();
+   		//Label artistLabel = new Label("Artist:");
+   		//TextField artistField = new TextField();
 
-   		secondaryLayout.add(artistLabel, 0, 2);
-   		secondaryLayout.add(artistField, 1, 2);
+   		//secondaryLayout.add(artistLabel, 0, 2);
+   	//	secondaryLayout.add(artistField, 1, 2);
 
    		Text albumText = new Text("No Album");
    		secondaryLayout.add(albumText, 1, 3);
@@ -220,6 +220,7 @@ public class UsernameAndPass extends Application{
            			String oldName = user.getUserName();
            			user.setUserName(userTextField.getText());
            			clickedUser.setUserName(user.getUserName());
+                clickedUser.setTrack(trackField.getText());
            			updateViewList();
            			client.updateUser(oldName, clickedUser.toString());
         		}
@@ -230,7 +231,7 @@ public class UsernameAndPass extends Application{
    		Button spotifyDisplayButton = new Button("Get Spotify Info");
    		secondaryLayout.add(spotifyDisplayButton, 5, 0);
 
-		//spotify	
+		//spotify
    		spotifyDisplayButton.setOnAction(new EventHandler<ActionEvent>() {
        		@Override public void handle(ActionEvent e) {
 
@@ -240,8 +241,7 @@ public class UsernameAndPass extends Application{
           			ss.clientCredentials_Sync();
           			spotifyCreds = true;
         		}
-        		user.setTrack(trackField.getText());
-        		Track [] tracks = ss.searchTracks_Sync(user.getTrack());
+        		Track [] tracks = ss.searchTracks_Sync(trackField.getText());
 
         		String album  = tracks[0].getAlbum().getName();
         		Image []albumImage = tracks[0].getAlbum().getImages();
@@ -280,7 +280,7 @@ public class UsernameAndPass extends Application{
    		// Set position of second window, related to primary window.
    		newWindow.setX(scene1.getX() + 200);
    		newWindow.setY(scene1.getY() + 100);
-		
+
    		newWindow.show();
 
  	}
@@ -288,10 +288,10 @@ public class UsernameAndPass extends Application{
 
 	/*this is the first form that shows, it allows a user to create an account
 	 *and also allows them to login to the chat server. Sends data to server and server
-   	 *responds 	
+   	 *responds
 	*/
 	public Scene createLoginScene(Stage win) {
-		
+
 		client.connect();				//once login form is opened, immediately we start connection with server
 
 		//form layout with grids & buttons
@@ -312,27 +312,27 @@ public class UsernameAndPass extends Application{
 
       	userTextField = new TextField();
       	grid.add(userTextField, 1, 1);
-		
+
       	Label pw = new Label("Password:");
       	grid.add(pw, 0, 2);
-	
+
       	pwBox = new PasswordField();
       	grid.add(pwBox, 1, 2);
       	HBox hbBtn = new HBox(10);
       	hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
       	hbBtn.getChildren().add(signInBtn);
       	grid.add(hbBtn, 1, 4);
-	
+
       	HBox newBtn = new HBox(10);
       	newBtn.setAlignment(Pos.BOTTOM_LEFT);
       	newBtn.getChildren().add(addBtn);
       	grid.add(newBtn, 1, 5);
-	
+
 		//on button press we see if login is avaliabl
       	signInBtn.setOnAction(e -> {
-	
+
       		handleLogin(userTextField.getText(), pwBox.getText());	//sends data to client to send to server
-	
+
       	});
 
 		//adds user to system
@@ -345,7 +345,7 @@ public class UsernameAndPass extends Application{
       	return new Scene(grid, 300, 250);
 	}
 
-	/*this is the main chat form. It functions as the main way ppl can communicate between other users 
+	/*this is the main chat form. It functions as the main way ppl can communicate between other users
 	   they can also see the others users and view their profiles*/
 	private Scene createMainScene(Stage win){
 
@@ -386,7 +386,7 @@ public class UsernameAndPass extends Application{
     	editProfButton.setOnAction(new EventHandler<ActionEvent>() {
         	@Override public void handle(ActionEvent e) {
           	//open window to edit profile
-          	//editProfile(user);
+
           		displayProfile(user);
 
         	}
@@ -411,7 +411,10 @@ public class UsernameAndPass extends Application{
     		@Override public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         		//System.out.println(newValue);
         		UserAccount clickedUser = userList.findUser(newValue);
-        		displayProfile(clickedUser);
+            if(clickedUser != null)
+            {
+        		    displayProfile(clickedUser);
+            }
 
 
     		}
@@ -476,10 +479,13 @@ public class UsernameAndPass extends Application{
 		if(login)
 		{
         	this.loginV = true;
-        	user.setUserName(userTextField.getText());
+        	user = userList.findUser(userTextField.getText());
+          if(user == null)
+          {
+            System.out.println("Cannot find user" + userTextField.getText());
+          }
         	window.setScene(scene2);
-        	window.setTitle("Main Chat App");
-
+        	window.setTitle("Main Chat App- " + userTextField.getText() + " logged in");
 		}
 		else
 				this.loginV =false;

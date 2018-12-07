@@ -23,7 +23,7 @@ import java.util.Scanner;
 //ClientHandler class
 public class ClientHandler implements Runnable {
 
-	//variables that keep track of users and connected sockets	
+	//variables that keep track of users and connected sockets
   	private Socket connectionSock = null;
   	private ArrayList<Socket> socketList;
   	UserAccountList userList;
@@ -51,9 +51,9 @@ public class ClientHandler implements Runnable {
         		String messageType = splitText[0];
         		String username;
         		String password;
-	
+
         		boolean again = true;
-	
+
         		if (clientText != null) {
           			System.out.println("Received: " + clientText);
           			System.out.println("message type: " + messageType);
@@ -68,7 +68,7 @@ public class ClientHandler implements Runnable {
                 				DataOutputStream clientOutput = new DataOutputStream(connectionSock.getOutputStream());
                 				String message = userList.toString();
                 				clientOutput.writeBytes("4 " + message + "\n");
-		
+
           					}
           					else{
             					DataOutputStream clientOutput = new DataOutputStream(connectionSock.getOutputStream());
@@ -76,12 +76,12 @@ public class ClientHandler implements Runnable {
       						}
       						again = false;
       						break;
-	
+
       						//add user case
       					case "2":
       						username = splitText[1];
       						password = splitText[2];
-      						UserAccount newUser = new UserAccount(username, password, "HEY","p","p");
+      						UserAccount newUser = new UserAccount(username, password, "HEY","mr brightside","killers");
       						userList.addUser(newUser);
       						DataOutputStream clientOutput;
       						String message = userList.toString();
@@ -94,7 +94,7 @@ public class ClientHandler implements Runnable {
 
       						again = false;
       						break;
-	
+
       					//message case
       					case "3":
       						for (Socket s : socketList) {
@@ -102,10 +102,10 @@ public class ClientHandler implements Runnable {
           							clientOutput = new DataOutputStream(s.getOutputStream());
           							clientOutput.writeBytes(clientText + "\n");
         						}
-						
+
       						}
       						break;
-	
+
 						//updates the user profile
       					case "7":
       						userList.updateUserFromString(splitText[1],splitText[2]);
@@ -118,9 +118,9 @@ public class ClientHandler implements Runnable {
         						}
       						}
       						break;
-	
+
       					default:
-	
+
       						break;
     				}
 				} else {
@@ -131,13 +131,13 @@ public class ClientHandler implements Runnable {
   					connectionSock.close();
   					break;
 				}
-	
+
 			}
 		} catch (Exception e) {
   			System.out.println("Error: " + e.toString());
   			// Remove from arraylist
   			socketList.remove(connectionSock);
 		}
-	
+
 	}
 } // ClientHandler for MtServer.java

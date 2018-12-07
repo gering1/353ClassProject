@@ -23,7 +23,7 @@ import java.io.Serializable;
 //A class which holds a list of all users and is serialized
 public class UserAccountList implements Serializable
 {
-	//arraylist of all users accounts	
+	//arraylist of all users accounts
 	public ArrayList<UserAccount> users = new ArrayList<UserAccount>();
 	private boolean fileWrite = true;
 
@@ -53,7 +53,7 @@ public class UserAccountList implements Serializable
 			outputStream();
 		}
 	}
-	
+
 	//finds user in list and returs user
 	public UserAccount findUser(String uName)
 	{
@@ -95,7 +95,8 @@ public class UserAccountList implements Serializable
 		if(ua != null)
 		{
 			String[] userParts = newData.split(":");
-			ua.setUserInfo(userParts[0],userParts[1],userParts[2],userParts[3],userParts[4]);
+			String rTrack = userParts[3].replaceAll("%20"," ");
+			ua.setUserInfo(userParts[0],userParts[1],userParts[2],rTrack,userParts[4]);
 		}
 
 	}

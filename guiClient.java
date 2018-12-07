@@ -54,9 +54,9 @@ public class guiClient {
 	public void connect()
 	{
     	try {
-		
-      	//	String hostname = "localhost"; 
-      		String hostname = "172.17.0.1";
+
+      	  String hostname = "localhost"; 
+
       		int port = 7654;
 
       		System.out.println("Connecting to server on port " + port);
