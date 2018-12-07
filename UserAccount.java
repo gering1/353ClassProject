@@ -1,7 +1,18 @@
+/*Charlie Raymond, Colton Gering, CPSC353 MWF 9-10am, Michael Fahy
+Final project
+this is the account class
+it keeps information for each user
+*/
+
+
 import java.io.Serializable;
 
+
+//class is serializable so we can store the data easily
 public class UserAccount implements Serializable
 {
+
+	//user data we collect
 	private String username;
 	private String password;
 	private Integer age;
@@ -10,10 +21,12 @@ public class UserAccount implements Serializable
 	private String authenticationCode;
 
 
+	//basic constructor
 	public UserAccount()
 	{
 	}
 
+	//copy constructor
 	public UserAccount(UserAccount user)
 	{
 		if(user == null)
@@ -27,11 +40,13 @@ public class UserAccount implements Serializable
 		this.authenticationCode = user.authenticationCode;
 	}
 
+	//constructor to initialize variables
 	public UserAccount(String newUsername, String newPass, String newCode, String newTrack, String newArtist)
 	{
 		setUserInfo(newUsername, newPass, newCode,newTrack,newArtist);
 	}
 
+	//sets the info
 	public void setUserInfo(String newUsername, String newPass, String newCode, String newTrack, String newArtist)
 	{
 		this.username = newUsername;
@@ -41,14 +56,14 @@ public class UserAccount implements Serializable
 		this.artist = newArtist;
 	}
 
+	//to string method
 	public String toString()
 	{
 		return(username + ":" + password + ":" + authenticationCode + ":" + track + ":" + artist);
-
 	}
 
 
-
+	//getter & setter functions
 	public String getUserName()
 	{
 			return this.username;
