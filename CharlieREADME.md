@@ -17,3 +17,9 @@ Charlie's contributions 11/27/18:
 Next contribution:
 
 -work on linking spotify to user accounts
+
+
+Final contribution:
+
+-Worked on spotify implementation, fixed bugs in the user login system
+ added Docker containers and images
