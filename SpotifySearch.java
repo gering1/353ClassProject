@@ -1,3 +1,12 @@
+/*Charlie Raymond, Colton Gering, CPSC353 MWF 9-10am, Michael Fahy
+ * Final project
+ * this is the spotify search class
+ * this is where all of our spotify implementation is done
+ * we found a resource online which aided in the completion 
+ * of this part of our project
+*/
+
+
 import com.neovisionaries.i18n.CountryCode;
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
@@ -15,19 +24,25 @@ import java.util.concurrent.Future;
 // https://github.com/thelinmichael/spotify-web-api-java
 //
 
+
+//spotify class
 public class SpotifySearch {
 
-    private static final String clientId = "132e797720bb47bd93d4af024d604f23";
+	//The keys required to access the spotify api
+	private static final String clientId = "132e797720bb47bd93d4af024d604f23";
     private static final String clientSecret = "38cf022f78804c9da00b20f3c26456ae";
 
+	//making spotify Api
     private static final SpotifyApi spotifyApi = new SpotifyApi.Builder()
-            .setClientId(clientId)
-            .setClientSecret(clientSecret)
-            .build();
+    	.setClientId(clientId)
+       	.setClientSecret(clientSecret)
+       	.build();
 
+	//getting client credentials
     private static final ClientCredentialsRequest clientCredentialsRequest = spotifyApi.clientCredentials()
-            .build();
+      	.build();
 
+	//sync client credentials
     public static void clientCredentials_Sync() {
         try {
             final ClientCredentials clientCredentials = clientCredentialsRequest.execute();
@@ -44,6 +59,7 @@ public class SpotifySearch {
 
 
 
+	//searches tracks based on search string, returns a list of results
     public  Track[] searchTracks_Sync(String q) {
         SearchTracksRequest searchTracksRequest = spotifyApi.searchTracks(q)
                 .limit(10)
