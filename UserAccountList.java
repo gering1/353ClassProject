@@ -1,3 +1,9 @@
+/*Charlie Raymond, Colton Gering, CPSC353 MWF 9-10am, Michael Fahy
+ * Final project
+ * this is the user account list class
+ * it keeps a list of all the users who have accounts
+*/
+
 import java.io.ObjectOutputStream;
 
 import java.io.FileInputStream;
@@ -14,11 +20,14 @@ import java.io.FileInputStream;
 import java.io.Serializable;
 
 
+//A class which holds a list of all users and is serialized
 public class UserAccountList implements Serializable
 {
-
+	//arraylist of all users accounts	
 	public ArrayList<UserAccount> users = new ArrayList<UserAccount>();
 	private boolean fileWrite = true;
+
+	//prints whole list
 	public void printList()
 	{
 		Iterator<UserAccount> it = users.iterator();
@@ -29,6 +38,7 @@ public class UserAccountList implements Serializable
 		}
 	}
 
+	//adds user to list
 	public void addUser(UserAccount newUser)
 	{
 		if(newUser == null)
@@ -43,7 +53,8 @@ public class UserAccountList implements Serializable
 			outputStream();
 		}
 	}
-
+	
+	//finds user in list and returs user
 	public UserAccount findUser(String uName)
 	{
 		Iterator<UserAccount> it = users.iterator();
@@ -59,6 +70,7 @@ public class UserAccountList implements Serializable
 		return null;
 	}
 
+	//removes user
 	public void removeUser(String userName)
 	{
 		Iterator<UserAccount> it = users.iterator();
@@ -76,6 +88,7 @@ public class UserAccountList implements Serializable
 		}
 	}
 
+	//updates userame
 	public void updateUserFromString(String oldName, String newData)
 	{
 		UserAccount ua = findUser(oldName);
@@ -87,6 +100,7 @@ public class UserAccountList implements Serializable
 
 	}
 
+	//a to string method for outputing data
 	public void stringToUserList(String data)
 	{
 		String[] userData = data.split(",");
@@ -101,6 +115,7 @@ public class UserAccountList implements Serializable
 		outputStream();
 	}
 
+	//checks login
 	public boolean login(String userName, String passWord)
 	{
 			Iterator<UserAccount> it = users.iterator();
@@ -119,17 +134,13 @@ public class UserAccountList implements Serializable
 			return false;
 	}
 
+	//outputs to a file
 	public void outputStream()
 	{
 		try
 		{
 			ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("Users"));
-
-			System.out.println("Working");
 			outputStream.writeObject(this);
-			System.out.println("Working");
-			//System.out.println(this.accountAmount);
-
 			outputStream.close();
 		}
 		catch(IOException e)
@@ -140,10 +151,12 @@ public class UserAccountList implements Serializable
 
 	}
 
+	//setter function
 	public void setFileWrite(boolean flag)
 	{
 		fileWrite = flag;
 	}
+
 	//input object from the file
 	public void inputObject()
 	{
@@ -151,7 +164,6 @@ public class UserAccountList implements Serializable
 		{
 			ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("Users"));
 			UserAccountList in1 = (UserAccountList)inputStream.readObject();
-			//users = (ArrayList<UserAccount>)inputStream.readObject();
 			users = in1.users;
 			inputStream.close();
 		}
@@ -172,6 +184,8 @@ public class UserAccountList implements Serializable
 		}
 
 	}
+
+	//to string method
  	public String toString()
 	{
 		String result = "";
